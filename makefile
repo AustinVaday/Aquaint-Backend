@@ -5,3 +5,5 @@ mock_api:
 
 clean:
 	cd ./bin; rm -f mock_api.zip
+
+.PHONY: mock_api clean
