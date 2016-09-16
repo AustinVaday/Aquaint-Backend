@@ -6,7 +6,7 @@ required-programs:
 venv: venv/bin/activate
 
 venv/bin/activate:
-	virtualenv venv
+	virtualenv -p /usr/bin/python2.7 venv
 	venv/bin/pip install -Ur requirements.txt
 	touch venv/bin/activate
 
