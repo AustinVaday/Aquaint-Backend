@@ -27,6 +27,13 @@ def updatern(event, sql):
 
     return sql_cd(sql, query)
 
+def simplesearch(event, sql):
+    query = "SELECT username, realname FROM users " + \
+        "WHERE username LIKE '%" + event['target'] + "%' " + \
+        "OR realname LIKE '%" + event['target'] + "%';"
+    
+    return dict(sql_select(sql, query))
+
 
 def follow(event, sql):
     if 'me' not in event: raise RuntimeError("Please specify 'me'.")
@@ -90,6 +97,7 @@ def getFolloweesDict(event, sql):
 dispatch = {
     'adduser':          adduser,
     'updatern':         updatern,
+    'simplesearch':     simplesearch,
     'follow':           follow,
     'unfollow':         unfollow,
     'getNumFollowers':  getNumFollowers,
