@@ -11,7 +11,7 @@ venv/bin/activate:
 	touch venv/bin/activate
 
 zip:
-	zip ../bin/mock_api.zip mock_api.py sqlconf.py
-	cd venv/lib/python2.7/site-packages/; zip -ru ../../../../../bin/mock_api.zip pymysql
+	-zip -u ../bin/mock_api.zip mock_api.py sqlconf.py
+	-cd venv/lib/python2.7/site-packages/; zip -ru ../../../../../bin/mock_api.zip pymysql
 
 .PHONY: required-programs venv zip
