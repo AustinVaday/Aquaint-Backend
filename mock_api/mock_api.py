@@ -28,11 +28,23 @@ def updatern(event, sql):
     return sql_cd(sql, query)
 
 def simplesearch(event, sql):
-    query = "SELECT username, realname FROM users " + \
-        "WHERE username LIKE '%" + event['target'] + "%' " + \
-        "OR realname LIKE '%" + event['target'] + "%';"
+    if 'start' not in event or 'end' not in event:
+        raise RuntimeError("Please specify range 'start' and 'end'.")
     
-    return dict(sql_select(sql, query))
+    sqlstart = max(event['start'], 0)
+    sqlcount = max(sqlstart, event['end']) - sqlstart
+    
+    query = "SELECT username FROM users " + \
+        "WHERE username LIKE '%" + event['target'] + "%' " + \
+        "OR realname LIKE '%" + event['target'] + "%' " + \
+        "limit " + str(sqlstart) + ", " + str(sqlcount) + ";"
+    
+    return list(
+        map(
+            lambda x: x[0],
+            sql_select(sql, query)
+        )
+    )
 
 
 def follow(event, sql):
