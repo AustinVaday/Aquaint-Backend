@@ -7,17 +7,28 @@ import sqlconf
 
 DYNAMO_REGION = 'us-east-1'
 DYNAMO_MAX_BYTES = 3500
-TIMELINE_LENGTH = 30
-
 SOURCE_TABLE = 'aquaint-newsfeed'
 DEST_TABLE = 'aquaint-newsfeed-result'
+
+TIMELINE_LENGTH = 30
 
 def dynamo_table(table):
     return boto3.resource('dynamodb', DYNAMO_REGION).Table(table)
 
 def dynamo_scan(db, field):
-    # full db scan for field
-    return []
+    ret = []
+    last_key = {}
+    while True:
+        result = db.scan(
+            Select='SPECIFIC_ATTRIBUTES',
+            AttributesToGet=[field],
+            ExclusiveStartKey=last_key
+        )
+        
+        last_key = result['LastEvaluatedKey']
+        if len(last_key) == 0: break
+    
+    return result['Items'][field]
 
 def mysql_db():
     return pymysql.connect(
@@ -34,19 +45,17 @@ def get_followees(cursor, user):
     )
     return map(lambda row: row[0], cursor.fetchall())
 
-def write_timeline(db, timeline):
+def write_timeline(db, timeline_records):
+    # write timeline records to table
     pass
 
 def read_timeline(db, user):
     response = db.get_item(Key={'username': user})
-    # extract response timeline data
-    # construct Events from timeline data
-    events = []
-    return events
+    return map(timeline.Event.from_dynamo, response['Item']['newsfeedList'])
 
 def json_chunk(events, to_jsonnable, max_size):
-    total_len = json.dumps(map(to_jsonnable, collection))
-    avg_event_len = int(total_len / len(collection))
+    total_len = json.dumps(map(to_jsonnable, events))
+    avg_event_len = int(total_len / len(events))
     events_per_record = int(DYNAMO_MAX_BYTES / avg_event_len) - 1
     
     event_partitions = [events[i:i+4] for i in range(0, len(events), events_per_record)]
@@ -80,10 +89,9 @@ def handler(event, context):
         ag = None
         gc.collect()
         
-        # batch timeline to 4kb json chunks
         timeline_jsons = json_chunk(
             timeline_result,
-            lambda event: json.dumps(event.__dict__),
+            lambda event: event.__dict__,
             DYNAMO_MAX_BYTES
         )
         
