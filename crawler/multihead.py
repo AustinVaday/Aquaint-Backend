@@ -18,7 +18,7 @@ class _Storage:
         return col[len(col)-1]
     
     def pop(self, index):
-        if size > 0:
+        if self.size > 0:
             ret = self.sources[index].pop()
             self.size -= 1
             self.__shrink()

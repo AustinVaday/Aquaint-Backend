@@ -7,6 +7,7 @@ class Event:
         self.other = other
         self.time  = time
     
+    @classmethod
     def from_dynamo(cls, user, dynamo_dict):
         return cls(
             user,
