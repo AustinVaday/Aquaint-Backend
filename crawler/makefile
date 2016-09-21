@@ -11,7 +11,10 @@ venv/bin/activate:
 	touch venv/bin/activate
 
 zip:
-	-zip -u ../bin/crawler.zip crawler.py timeline.py multihead.py
-	-cd venv/lib/python2.7/site-packages/; zip -ru ../../../../../bin/crawler.zip sqlalchemy
+	-zip -u ../bin/crawler.zip crawler.py timeline.py multihead.py sqlconf.py
+	-cd venv/lib/python2.7/site-packages/; zip -ru ../../../../../bin/crawler.zip pymysql
 
-.PHONY: required-programs venv zip
+clean:
+	rm -rf venv *.pyc
+
+.PHONY: clean required-programs venv zip
