@@ -1,9 +1,12 @@
-all: mock_api
+all: mock_api crawler
 
 mock_api:
 	$(MAKE) -C mock_api
 
-clean:
-	cd ./bin; rm -f mock_api.zip
+crawler:
+	$(MAKE) -C crawler
 
-.PHONY: mock_api clean
+clean:
+	cd ./bin; rm -f mock_api.zip crawler.zip
+
+.PHONY: mock_api crawler clean
