@@ -3,6 +3,7 @@ import json
 
 import pymysql
 import boto3
+from boto3.dynamodb.conditions import Key
 
 import timeline
 import sqlconf
@@ -10,40 +11,50 @@ import sqlconf
 DYNAMO_REGION = 'us-east-1'
 DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-newsfeed'
-DEST_TABLE = 'aquaint-newsfeed-result'
+DEST_TABLE   = 'aquaint-newsfeed-results'
 
 TIMELINE_LENGTH = 30
 
 def dynamo_table(table_name):
     return boto3.resource(
-        'dynamodb',
-        endpoint_url='https://dynamodb.us-east-1.amazonaws.com'
+        'dynamodb'
     ).Table(table_name)
 
 def dynamo_scan(table, field):
     ret = []
-    last_key = {}
+    last_key = None
     while True:
-        print('DynamoDB Scan')
-        result = table.scan(
-            ProjectionExpression=field,
-            ExclusiveStartKey=last_key
+        opts = { 'ProjectionExpression': field }
+        if last_key is not None: opts.update({'ExclusiveStartKey': last_key})
+        
+        result = table.scan(**opts)
+        
+        ret += map(
+            lambda item: item[field],
+            result['Items']
         )
-        print('Got %s items' % len(result['Items']))
-        ret.append(result['Items'][field])
-        last_key = result['LastEvaluatedKey']
-        if len(last_key) == 0: break
+        
+        if 'LastEvaluatedKey' in result:
+            last_key = result['LastEvaluatedKey']
+        else:
+            break
     
     return ret
 
 def read_timeline(db, user):
-    response = db.get_item(Key={'username': user})
-    return map(timeline.Event.from_dynamo, response['Item']['newsfeedList'])
+    events = db.get_item(
+        Key={ 'username': user }
+    )['Item']['newsfeedList']
+    
+    return map(
+        lambda event: timeline.Event.from_dynamo(user, event),
+        events
+    )
 
 def write_timeline(table, user, timeline_jsons):
     old = table.query(
-        KeyConditions={ 'username': user },
-        ProjectionExpression='username, sequence'
+        KeyConditionExpression=Key('username').eq(user),
+        ProjectionExpression='username, seq'
     )['Items']
     
     for record in old:
@@ -53,7 +64,7 @@ def write_timeline(table, user, timeline_jsons):
         table.put_item(
             Item={
                 'username': user,
-                'sequence': i,
+                'seq': i,
                 'data': timeline_json
             }
         )
@@ -74,7 +85,13 @@ def get_followees(cursor, user):
     return map(lambda row: row[0], cursor.fetchall())
 
 def json_chunk(events, to_jsonnable, max_size):
-    total_len = json.dumps(map(to_jsonnable, events))
+    if len(events) == 0: return ['[]']
+
+    total_len = len(
+        json.dumps(
+            map(to_jsonnable, events)
+        )
+    )
     avg_event_len = int(total_len / len(events))
     events_per_record = int(DYNAMO_MAX_BYTES / avg_event_len) - 1
     
@@ -90,18 +107,15 @@ def json_chunk(events, to_jsonnable, max_size):
         event_partitions
     )
 
-def handler(event, context):
-    print('Connecting DynamoDB')
+def crawl():
     source = dynamo_table(SOURCE_TABLE)
     dest   = dynamo_table(DEST_TABLE)
-    
-    print('Connecting MySQL')
     conns  = mysql_db()
+    print('Connected databases.')
     
-    print('Getting DynamoDB user listing')
     users = dynamo_scan(source, 'username')
+    print('Found %s users.' % len(users))
     
-    print('Enumerating users')
     for user in users:
         print('Processing %s.' % user)
         ag = timeline.Aggregator()
@@ -122,3 +136,5 @@ def handler(event, context):
         )
         
         write_timeline(dest, user, timeline_jsons)
+
+    print('Done.')
