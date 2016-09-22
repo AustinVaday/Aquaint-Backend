@@ -22,8 +22,7 @@ class Event:
         return cls(
             user,
             dynamo_dict['event'],
-            dynamo_dict['otheruser'] if 'otheruser' in dynamo_dict
-                else list(dynamo_dict['otherusers'][0]), # This is a major problem with the data schema
+            dynamo_dict['other'],
             int(dynamo_dict['time'])
         )
     
