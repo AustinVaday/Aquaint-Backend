@@ -9,8 +9,8 @@ import timeline
 import sqlconf
 
 DYNAMO_MAX_BYTES = 3500
-SOURCE_TABLE = 'aquaint-newsfeed'
-DEST_TABLE   = 'aquaint-newsfeed-results'
+SOURCE_TABLE = 'aquaint-user-eventlist'
+DEST_TABLE   = 'aquaint-newsfeed'
 
 TIMELINE_LENGTH = 30
 
