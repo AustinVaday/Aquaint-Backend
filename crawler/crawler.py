@@ -8,7 +8,6 @@ from boto3.dynamodb.conditions import Key
 import timeline
 import sqlconf
 
-DYNAMO_REGION = 'us-east-1'
 DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-newsfeed'
 DEST_TABLE   = 'aquaint-newsfeed-results'
@@ -25,7 +24,8 @@ def dynamo_scan(table, field):
     last_key = None
     while True:
         opts = { 'ProjectionExpression': field }
-        if last_key is not None: opts.update({'ExclusiveStartKey': last_key})
+        if last_key is not None:
+            opts.update({'ExclusiveStartKey': last_key})
         
         result = table.scan(**opts)
         
@@ -82,7 +82,10 @@ def get_followees(cursor, user):
         'SELECT followee FROM username_follows WHERE follower = %s;',
         (user)
     )
-    return map(lambda row: row[0], cursor.fetchall())
+    return map(
+        lambda row: row[0],
+        cursor.fetchall()
+    )
 
 def json_chunk(events, to_jsonnable, max_size):
     if len(events) == 0: return ['[]']
@@ -95,7 +98,13 @@ def json_chunk(events, to_jsonnable, max_size):
     avg_event_len = int(total_len / len(events))
     events_per_record = int(DYNAMO_MAX_BYTES / avg_event_len) - 1
     
-    event_partitions = [events[i:i+4] for i in range(0, len(events), events_per_record)]
+    event_partitions = [events[i:i+4]
+	for i in range(
+            0,
+            len(events),
+            events_per_record
+        )
+    ]
     
     return map(
         lambda events: json.dumps(
@@ -120,9 +129,7 @@ def crawl():
         print('Processing %s.' % user)
         ag = timeline.Aggregator()
         
-        followees = get_followees(conns, user)
-        
-        for followee in followees:
+        for followee in get_followees(conns, user):
             ag.load(followee, read_timeline(source, followee))
         
         timeline_result = ag.sort(TIMELINE_LENGTH)
