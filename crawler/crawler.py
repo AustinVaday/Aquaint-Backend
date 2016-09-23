@@ -42,14 +42,21 @@ def dynamo_scan(table, field):
     return ret
 
 def read_timeline(db, user):
-    events = db.get_item(
-        Key={ 'username': user }
-    )['Item']['newsfeedList']
+    
+    try:
+        events = db.get_item(
+            Key={ 'username': user }
+        )['Item']['newsfeedList']
+        
+    except Exception:
+        print 'exception handled for ' + user + '.'
+        return dict() 
     
     return map(
-        lambda event: timeline.Event.from_dynamo(user, event),
-        events
+	lambda event: timeline.Event.from_dynamo(user, event),
+	events
     )
+    
 
 def write_timeline(table, user, timeline_jsons):
     old = table.query(
