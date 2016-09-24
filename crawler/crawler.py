@@ -12,7 +12,7 @@ DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
 DEST_TABLE   = 'aquaint-newsfeed'
 
-TIMELINE_LENGTH = 30
+TIMELINE_LENGTH = 60
 
 def dynamo_table(table_name):
     return boto3.resource(
