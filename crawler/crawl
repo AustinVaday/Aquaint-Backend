@@ -1,4 +1,6 @@
 #!/usr/bin/env python2
 import crawler
+from datetime import datetime
 
+print('Crawling at %s' % datetime.now())
 crawler.crawl()

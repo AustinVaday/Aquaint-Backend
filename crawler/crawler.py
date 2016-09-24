@@ -121,17 +121,23 @@ def crawl():
     source = dynamo_table(SOURCE_TABLE)
     dest   = dynamo_table(DEST_TABLE)
     conns  = mysql_db()
-    print('Connected databases.')
+    print('Connected databases')
     
     users = dynamo_scan(source, 'username')
-    print('Found %s users.' % len(users))
+    print('Found %s users' % len(users))
     
     for user in users:
-        print('Processing %s.' % user)
+        print('Processing %s' % user)
         ag = timeline.Aggregator()
         
         for followee in get_followees(conns, user):
-            ag.load(followee, read_eventlist(source, followee))
+            followee_events = read_eventlist(source, followee)
+            ag.load(
+                filter( # Filter out events where the current user is the only subject
+                    lambda event: not (user in event.other and len(event.other) == 1),
+                    followee_events
+                )
+            )
         
         timeline_result = ag.sort(TIMELINE_LENGTH)
         ag = None
@@ -145,4 +151,4 @@ def crawl():
         
         write_timeline(dest, user, timeline_jsons)
 
-    print('Done.')
+    print('Done')

@@ -30,7 +30,7 @@ class Aggregator:
     def __init__(self):
         self.sorter = multihead.Sorter(lambda event: event.time)
     
-    def load(self, user, events):
+    def load(self, events):
         self.sorter.load(events)
     
     def sort(self, count):
