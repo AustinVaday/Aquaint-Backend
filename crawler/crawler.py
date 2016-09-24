@@ -41,22 +41,16 @@ def dynamo_scan(table, field):
     
     return ret
 
-def read_timeline(db, user):
+def read_eventlist(db, user):
+    response = db.get_item(Key={ 'username': user })
     
-    try:
-        events = db.get_item(
-            Key={ 'username': user }
-        )['Item']['newsfeedList']
-        
-    except Exception:
-        print 'exception handled for ' + user + '.'
-        return dict() 
+    if 'Item' not in response: return []
     
+    events = response['Item']['newsfeedList']
     return map(
-	lambda event: timeline.Event.from_dynamo(user, event),
-	events
+        lambda event: timeline.Event.from_dynamo(user, event),
+        events
     )
-    
 
 def write_timeline(table, user, timeline_jsons):
     old = table.query(
@@ -137,7 +131,7 @@ def crawl():
         ag = timeline.Aggregator()
         
         for followee in get_followees(conns, user):
-            ag.load(followee, read_timeline(source, followee))
+            ag.load(followee, read_eventlist(source, followee))
         
         timeline_result = ag.sort(TIMELINE_LENGTH)
         ag = None

@@ -34,14 +34,10 @@ class Aggregator:
         self.sorter.load(events)
     
     def sort(self, count):
-        # (1..count).map { @sorter.pop }.compress.reverse
-        return list(
-            reversed(
-                filter(lambda x: x is not None,
-                    map(
-                        lambda _: self.sorter.pop(),
-                        range(count)
-                    )
-                )
-            )
-        )
+        return filter(
+            lambda x: x is not None,
+	    map(
+		lambda _: self.sorter.pop(),
+		range(count)
+	    )
+	)
