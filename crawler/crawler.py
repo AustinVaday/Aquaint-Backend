@@ -99,8 +99,8 @@ def json_chunk(events, to_jsonnable, max_size):
     avg_event_len = int(total_len / len(events))
     events_per_record = int(DYNAMO_MAX_BYTES / avg_event_len) - 1
     
-    event_partitions = [events[i:i+4]
-	for i in range(
+    event_partitions = [events[i:i+events_per_record]
+        for i in range(
             0,
             len(events),
             events_per_record
