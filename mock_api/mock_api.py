@@ -1,14 +1,14 @@
 import pymysql, sqlconf
 
-def sql_select(sql, query, inserts=()):
+def sql_select(sql, query):
     cursor = sql.cursor()
-    cursor.execute(query, inserts)
+    cursor.execute(query)
     results = cursor.fetchall()
     return results
 
-def sql_cd(sql, query, inserts=()):
+def sql_cd(sql, query):
     cursor = sql.cursor()
-    count = cursor.execute(query, inserts)
+    count = cursor.execute(query)
     sql.commit()
     return count
 
@@ -16,18 +16,22 @@ def sql_cd(sql, query, inserts=()):
 def adduser(event, sql):
     if 'realname' not in event: raise RuntimeError("Please specify 'realname'.")
     
-    query = 'INSERT INTO users (username, realname) VALUES(%s, %s);'
-    inserts = (event['target'], event['realname'])
+    query = "INSERT INTO users (username, realname) VALUES('{target}', '{realname}');".format(
+        target = event['target'],
+        realname = event['realname']
+    )
     
-    return sql_cd(sql, query, inserts)
+    return sql_cd(sql, query)
 
 def updatern(event, sql):
     if 'realname' not in event: raise RuntimeError("Please specify 'realname'.")
     
-    query = 'UPDATE users SET realname = %s WHERE username = %s;'
-    inserts = (event['realname'], event['target'])
+    query = "UPDATE users SET realname = '{realname}' WHERE username = '{target}';".format(
+        realname = event['realname'],
+        target = event['target']
+    )
     
-    return sql_cd(sql, query, inserts)
+    return sql_cd(sql, query)
 
 def simplesearch(event, sql):
     if 'start' not in event or 'end' not in event:
@@ -35,70 +39,79 @@ def simplesearch(event, sql):
     
     sqlstart = max(event['start'], 0)
     sqlcount = max(sqlstart, event['end']) - sqlstart
-    matcher = '%{}%'.format(event['target'])
     
-    query = ("SELECT username FROM users WHERE username LIKE %s " + \
-        "OR realname LIKE %s LIMIT %s, %s;")
-    inserts = (matcher, matcher, sqlstart, sqlcount)
+    query = ("SELECT username FROM users WHERE username LIKE '%{target}%' " + \
+        "OR realname LIKE '%{target}%' LIMIT {start}, {count};")\
+        .format(
+            target = event['target'],
+            start = sqlstart,
+            count = sqlcount
+        )
     
-    result = sql_select(sql, query, inserts)
     
-    return list(map(lambda x: x[0], result))
+    return list(
+        map(
+            lambda x: x[0],
+            sql_select(sql, query)
+        )
+    )
 
 
 def follow(event, sql):
     if 'me' not in event: raise RuntimeError("Please specify 'me'.")
-    
-    query = "INSERT INTO follows (follower, followee) VALUES (" + \
-            "(SELECT user_index FROM users WHERE username = %s), " + \
-            "(SELECT user_index FROM users WHERE username = %s) " + \
-        ");"
-    inserts = (event['me'], event['target'])
+    query = ("INSERT INTO follows (follower, followee) VALUES (" + \
+            "(SELECT user_index FROM users WHERE username = '{me}'), " + \
+            "(SELECT user_index FROM users WHERE username = '{target}') " + \
+        ");").format(
+            me = event['me'],
+            target = event['target']
+        )
     
     return sql_cd(sql, query)
 
 def unfollow(event, sql):
     if 'me' not in event: raise RuntimeError("Please specify 'me'.")
+    query = ("DELETE FROM follows " + \
+        "WHERE follower = (SELECT user_index FROM users WHERE username = '{me}') " + \
+        "AND followee = (SELECT user_index FROM users WHERE username = '{target}');").format(
+            me = event['me'],
+            target = event['target']
+        )
 
-    query = "DELETE FROM follows " + \
-        "WHERE follower = (" + \
-            "SELECT user_index FROM users WHERE username = %s" + \
-        ") AND followee = (" + \
-            "SELECT user_index FROM users WHERE username = %s" + \
-        ");"
-    inserts = (event['me'], event['target'])
-
-    return sql_cd(sql, query, inserts)
+    return sql_cd(sql, query)
 
 
 def getNumFollowers(event, sql):
-    query = "SELECT COUNT(follower) FROM username_follows " + \
-        "WHERE followee = %s;"
-    inserts = (event['target'])
+    query = "SELECT COUNT(follower) FROM username_follows WHERE followee = '{}';".format(
+        event['target']
+    )
     
-    return sql_select(sql, query, inserts)[0][0]
+    return sql_select(sql, query)[0][0]
 
 
 def getNumFollowees(event, sql):
-    query = "SELECT COUNT(followee) FROM username_follows WHERE follower = %s;"
-    inserts = (event['target'])
+    query = "SELECT COUNT(followee) FROM username_follows WHERE follower = '{}';".format(
+        event['target']
+    )
     
-    return sql_select(sql, query, inserts)[0][0]
+    return sql_select(sql, query)[0][0]
 
 
 def getFollowers(event, sql):
-    query = "SELECT follower, UNIX_TIMESTAMP(timestamp) " + \
-        "FROM username_follows WHERE followee = %s ORDER BY timestamp DESC;"
-    inserts = (event['target'])
+    query = ("SELECT follower, UNIX_TIMESTAMP(timestamp) FROM username_follows " + \
+        "WHERE followee = '{}' ORDER BY timestamp DESC;").format(
+            event['target']
+        )
     
-    return sql_select(sql, query, inserts)
+    return sql_select(sql, query)
 
 def getFollowees(event, sql):
-    query = "SELECT followee, UNIX_TIMESTAMP(timestamp) " + \
-        "FROM username_follows WHERE follower = %s ORDER BY timestamp DESC;"
-    inserts = (event['target'])
+    query = ("SELECT followee, UNIX_TIMESTAMP(timestamp) FROM username_follows " + \
+        "WHERE follower = '{}' ORDER BY timestamp DESC;").format(
+            event['target']
+        )
     
-    return sql_select(sql, query, inserts)
+    return sql_select(sql, query)
 
 def getFollowersDict(event, sql):
     return dict(getFollowers(event,sql))
