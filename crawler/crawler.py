@@ -108,7 +108,7 @@ def json_chunk(events, to_jsonnable, max_size):
     # No events handler
     if len(events) == 0: return ['[]']
 
-    # Determine page size
+    # Estimate page JSON size
     total_len = len(
         json.dumps(
             map(to_jsonnable, events)
@@ -117,7 +117,7 @@ def json_chunk(events, to_jsonnable, max_size):
     avg_event_len = int(total_len / len(events))
     events_per_record = int(DYNAMO_MAX_BYTES / avg_event_len) - 1
     
-    # Paginate events
+    # Paginate events based on JSON size estimate
     event_partitions = [
         events[i:i+events_per_record] for i in range(
             0,
@@ -148,7 +148,7 @@ def crawl():
     users = dynamo_scan(source, 'username')
     print('Found %s users' % len(users))
     
-    #Iterate over all users
+    # Iterate over all users
     for user in users:
         print('Processing %s' % user)
         # Create new timeline aggregator
@@ -167,10 +167,10 @@ def crawl():
                 )
             )
         
-        # Sort only enough events to fill timeline
+        # Sort off only enough events to fill timeline
         timeline_result = ag.sort(TIMELINE_LENGTH)
         
-        # Garbage collect aggregator
+        # Delete aggregator and remaining events
         ag = None
         gc.collect()
         
