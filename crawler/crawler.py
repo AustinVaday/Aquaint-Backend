@@ -115,7 +115,7 @@ def json_chunk(events, to_jsonnable, max_size):
         )
     )
     avg_event_len = int(total_len / len(events))
-    events_per_record = int(DYNAMO_MAX_BYTES / avg_event_len) - 1
+    events_per_record = int(max_size / avg_event_len) - 1
     
     # Paginate events based on JSON size estimate
     event_partitions = [
@@ -162,7 +162,7 @@ def crawl():
             ag.load(
                 # Remove events where the current user is the only subject
                 filter(
-                    lambda event: not (user in event.other and len(event.other) == 1),
+                    lambda event, user=user: not (user in event.other and len(event.other) == 1),
                     followee_events
                 )
             )
