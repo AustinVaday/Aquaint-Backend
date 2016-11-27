@@ -121,14 +121,14 @@ def getFolloweesDict(event, sql):
 
 def doIFollow(event, sql):
     if 'me' not in event: raise RuntimeError("Please specify 'me'.")
-    query = ("SELECT * FROM follows " + \
+    query = ("SELECT COUNT(*) FROM follows " + \
         "WHERE follower = (SELECT user_index FROM users WHERE username = '{me}') " + \
         "AND followee = (SELECT user_index FROM users WHERE username = '{target}');").format(
             me = event['me'],
             target = event['target']
         )
     
-    return sql_cd(sql, query)
+    return sql_select(sql, query)[0][0]
 
 dispatch = {
     'adduser':          adduser,
