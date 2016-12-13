@@ -1,4 +1,4 @@
-### PyAPNs - Apple Push Notification & AWS DynamoDB testing
+## PyAPNs - Apple Push Notification & AWS DynamoDB testing
 The script tests reading an entry in DynamoDB database and sends iOS push notification in Python. **The actual script to run is `send_apn.py`**
 
 ### Libraries Installation
