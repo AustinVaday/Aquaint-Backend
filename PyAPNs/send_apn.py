@@ -41,8 +41,10 @@ else:
     print("GetItem succeeded.")
 
     # send an Apple Push Notification
-    token_hex = item["deviceid"]
-    print(item["deviceid"])
-    payload = Payload(alert="An Apple push notification for Austin, data from DynamoDB and sent from Python!", sound="default", badge=1)
+    device_id_list = item["deviceidlist"]
 
-    apns.gateway_server.send_notification(token_hex, payload)
+    for token_hex in device_id_list:
+        print(token_hex)
+        payload = Payload(alert="An Apple push notification for " + username + ", data from DynamoDB and sent from Python!", sound="default", badge=1)
+
+        apns.gateway_server.send_notification(token_hex, payload)
