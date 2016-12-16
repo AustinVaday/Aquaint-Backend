@@ -12,6 +12,7 @@ import sqlconf
 DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
 DEST_TABLE   = 'aquaint-newsfeed'
+NOTIFICATION_PERIOD_SEC = 43200 #12hrs
 
 TIMELINE_LENGTH = 60
 
@@ -223,7 +224,8 @@ def crawl():
         print("Notification time stamp for user %s is %d" % (user, notification_timestamp)) 
 
         # Generate list of new followers for push notifications
-        new_followers = [event.other[0] for event in read_eventlist(source, user) if event.time > notification_timestamp and event.event == 'newfollower']
+        new_followers = set([event.other[0] for event in read_eventlist(source, user) if (event.time - notification_timestamp) > NOTIFICATION_PERIOD_SEC and event.event == 'newfollower'])
+
         print("new_follers are: %s" % new_followers)
 
         # PUSH NOTIFICATIONS CODE HERE
