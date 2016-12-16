@@ -220,14 +220,16 @@ def crawl():
         write_timeline(dest, user, timeline_jsons)
 
         notification_timestamp = read_eventlist_notif(source, user) 
-        print("Notification time stamp for user %s is %d" % user % notification_timestamp) 
+        print("Notification time stamp for user %s is %d" % (user, notification_timestamp)) 
 
         # Generate list of new followers for push notifications
-        new_followers = [event.other for event in read_eventlist(source, user) if event.timestamp > notification_timestamp]
+        new_followers = [event.other[0] for event in read_eventlist(source, user) if event.time > notification_timestamp and len(event.other) == 1]
         print("new_follers are: %s" % new_followers)
 
         # PUSH NOTIFICATIONS CODE HERE
 
         # If we send push notification successfully, update db user with new notification timestamp
-        write_eventlist_notif(source, user, get_current_timestamp())
+        if not new_followers:
+            write_eventlist_notif(source, user, get_current_timestamp())
+
     print('Done')
