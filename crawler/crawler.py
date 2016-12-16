@@ -223,7 +223,7 @@ def crawl():
         print("Notification time stamp for user %s is %d" % (user, notification_timestamp)) 
 
         # Generate list of new followers for push notifications
-        new_followers = [event.other[0] for event in read_eventlist(source, user) if event.time > notification_timestamp and len(event.other) == 1]
+        new_followers = [event.other[0] for event in read_eventlist(source, user) if event.time > notification_timestamp and event.event == 'newfollower']
         print("new_follers are: %s" % new_followers)
 
         # PUSH NOTIFICATIONS CODE HERE
