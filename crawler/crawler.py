@@ -75,6 +75,10 @@ def read_eventlist_notif(db, user):
     # No Events handler
     if 'Item' not in response: return 0 
     
+	# If no notificationTimestamp, we create one. 
+	if 'notificationTimestamp' not in response['Item']:
+		write_eventlist_notif(db, "tolvstad", 0)	
+
     # Convert raw data to integer val 
     return response['Item']['notificationTimestamp']
 
