@@ -232,7 +232,7 @@ def crawl():
         # PUSH NOTIFICATIONS CODE HERE
 	
         # Make sure to make use of this variable below 
-		# Will determine whether we write a new notification timestamp or not later in the script
+        # Will determine whether we write a new notification timestamp or not later in the script
         did_send_notif = False
 
         # If we send push notification successfully, update db user with new notification timestamp
