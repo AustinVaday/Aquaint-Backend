@@ -224,14 +224,18 @@ def crawl():
         print("Notification time stamp for user %s is %d" % (user, notification_timestamp)) 
 
         # Generate list of new followers for push notifications
-        new_followers = set([event.other[0] for event in read_eventlist(source, user) if (event.time - notification_timestamp) > NOTIFICATION_PERIOD_SEC and event.event == 'newfollower'])
+        new_followers_list = [event.other[0] for event in read_eventlist(source, user) if (event.time - notification_timestamp) > NOTIFICATION_PERIOD_SEC and event.event == 'newfollower']
+		new_followers = set(new_follers_list)
 
         print("new_follers are: %s" % new_followers)
 
         # PUSH NOTIFICATIONS CODE HERE
+	
+		# Make sure to make use of this variable below. Will determine whether we write a new notification timestamp or not later in the script.
+		did_send_notif = False
 
         # If we send push notification successfully, update db user with new notification timestamp
-        if not new_followers:
+        if did_send_notif:
             write_eventlist_notif(source, user, get_current_timestamp())
 
     print('Done')
