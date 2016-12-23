@@ -149,13 +149,27 @@ def getFollowersDict(event, sql):
 def getFolloweesDict(event, sql):
     return dict(getFollowees(event,sql))
 
-def getFollowRequests(event, sql):
+def getFollowerRequests(event, sql):
     query = ("SELECT follower, UNIX_TIMESTAMP(timestamp) FROM username_follow_requests " + \
         "WHERE followee = '{}' ORDER BY timestamp DESC;").format(
             event['target']
         )
     
     return sql_select(sql, query)
+
+def getFolloweeRequests(event, sql):
+    query = ("SELECT followee, UNIX_TIMESTAMP(timestamp) FROM username_follow_requests " + \
+        "WHERE follower = '{}' ORDER BY timestamp DESC;").format(
+            event['target']
+        )
+    
+    return sql_select(sql, query)
+
+def getFollowerRequestsDict(event, sql):
+    return dict(getFollowerRequests(event,sql))
+
+def getFolloweeRequestsDict(event, sql):
+    return dict(getFolloweeRequests(event,sql))
 
 def doIFollow(event, sql):
     if 'me' not in event: raise RuntimeError("Please specify 'me'.")
@@ -194,7 +208,10 @@ dispatch = {
     'getFollowees':             getFollowees,
     'getFollowersDict':         getFollowersDict,
     'getFolloweesDict':         getFolloweesDict,
-    'getFollowRequests':        getFollowRequests,
+    'getFollowerRequests':      getFollowerRequests,
+    'getFolloweeRequests':      getFolloweeRequests,
+    'getFollowerRequestsDict':  getFollowerRequestsDict,
+    'getFolloweeRequestsDict':  getFolloweeRequestsDict,
     'doIFollow':       	        doIFollow,
     'didISendFollowRequest':    didISendFollowRequest
 }
