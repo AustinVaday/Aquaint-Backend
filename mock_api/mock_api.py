@@ -128,20 +128,44 @@ def getNumFollowRequests(event, sql):
     return sql_select(sql, query)[0][0]
 
 def getFollowers(event, sql):
-    query = ("SELECT follower, UNIX_TIMESTAMP(timestamp) FROM username_follows " + \
-        "WHERE followee = '{}' ORDER BY timestamp DESC;").format(
+    if 'start' not in event or 'end' not in event:
+        query = ("SELECT follower, UNIX_TIMESTAMP(timestamp) FROM username_follows " + \
+            "WHERE followee = '{}' ORDER BY timestamp DESC;").format(
             event['target']
-        )
-    
-    return sql_select(sql, query)
+            )
+
+        return sql_select(sql, query)
+    else:
+        sqlstart = max(event['start'], 0)
+        sqlcount = max(sqlstart, event['end']) - sqlstart
+
+        query = ("SELECT follower, UNIX_TIMESTAMP(timestamp) FROM username_follows " + \
+            "WHERE followee = '{target}' ORDER BY timestamp DESC LIMIT {start}, {count};").format(
+                target = event['target'],
+                start = sqlstart,
+                count = sqlcount
+                )
+        return sql_select(sql, query)
 
 def getFollowees(event, sql):
-    query = ("SELECT followee, UNIX_TIMESTAMP(timestamp) FROM username_follows " + \
-        "WHERE follower = '{}' ORDER BY timestamp DESC;").format(
+    if 'start' not in event or 'end' not in event:
+        query = ("SELECT followee, UNIX_TIMESTAMP(timestamp) FROM username_follows " + \
+            "WHERE follower = '{}' ORDER BY timestamp DESC;").format(
             event['target']
-        )
-    
-    return sql_select(sql, query)
+            )
+
+        return sql_select(sql, query)
+    else:
+        sqlstart = max(event['start'], 0)
+        sqlcount = max(sqlstart, event['end']) - sqlstart
+
+        query = ("SELECT followee, UNIX_TIMESTAMP(timestamp) FROM username_follows " + \
+            "WHERE follower = '{target}' ORDER BY timestamp DESC LIMIT {start}, {count};").format(
+                target = event['target'],
+                start = sqlstart,
+                count = sqlcount
+                )
+        return sql_select(sql, query)
 
 def getFollowersDict(event, sql):
     return dict(getFollowers(event,sql))
@@ -150,20 +174,44 @@ def getFolloweesDict(event, sql):
     return dict(getFollowees(event,sql))
 
 def getFollowerRequests(event, sql):
-    query = ("SELECT follower, UNIX_TIMESTAMP(timestamp) FROM username_follow_requests " + \
-        "WHERE followee = '{}' ORDER BY timestamp DESC;").format(
+    if 'start' not in event or 'end' not in event:
+        query = ("SELECT follower, UNIX_TIMESTAMP(timestamp) FROM username_follow_requests " + \
+            "WHERE followee = '{}' ORDER BY timestamp DESC;").format(
             event['target']
-        )
-    
-    return sql_select(sql, query)
+            )
+
+        return sql_select(sql, query)
+    else:
+        sqlstart = max(event['start'], 0)
+        sqlcount = max(sqlstart, event['end']) - sqlstart
+
+        query = ("SELECT follower, UNIX_TIMESTAMP(timestamp) FROM username_follow_requests " + \
+            "WHERE followee = '{target}' ORDER BY timestamp DESC LIMIT {start}, {count};").format(
+                target = event['target'],
+                start = sqlstart,
+                count = sqlcount
+                )
+        return sql_select(sql, query)
 
 def getFolloweeRequests(event, sql):
-    query = ("SELECT followee, UNIX_TIMESTAMP(timestamp) FROM username_follow_requests " + \
-        "WHERE follower = '{}' ORDER BY timestamp DESC;").format(
+    if 'start' not in event or 'end' not in event:
+        query = ("SELECT followee, UNIX_TIMESTAMP(timestamp) FROM username_follow_requests " + \
+            "WHERE follower = '{}' ORDER BY timestamp DESC;").format(
             event['target']
-        )
-    
-    return sql_select(sql, query)
+            )
+
+        return sql_select(sql, query)
+    else:
+        sqlstart = max(event['start'], 0)
+        sqlcount = max(sqlstart, event['end']) - sqlstart
+
+        query = ("SELECT followee, UNIX_TIMESTAMP(timestamp) FROM username_follow_requests " + \
+            "WHERE follower = '{target}' ORDER BY timestamp DESC LIMIT {start}, {count};").format(
+                target = event['target'],
+                start = sqlstart,
+                count = sqlcount
+                )
+        return sql_select(sql, query)
 
 def getFollowerRequestsDict(event, sql):
     return dict(getFollowerRequests(event,sql))
