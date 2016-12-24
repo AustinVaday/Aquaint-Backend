@@ -119,14 +119,13 @@ def getNumFollowees(event, sql):
     
     return sql_select(sql, query)[0][0]
 
-
 def getNumFollowRequests(event, sql):
     query = "SELECT COUNT(follower) FROM username_follow_requests WHERE followee = '{}';".format(
         event['target']
     )
     
     return sql_select(sql, query)[0][0]
-
+  
 def getFollowers(event, sql):
     if 'start' not in event or 'end' not in event:
         query = ("SELECT follower, UNIX_TIMESTAMP(timestamp) FROM username_follows " + \
