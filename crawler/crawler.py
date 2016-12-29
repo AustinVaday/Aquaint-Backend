@@ -155,7 +155,8 @@ def get_followees(cursor, user):
 # Note that we do not include followers that were user-approved. This will be separate
 def get_recent_public_follows(cursor, user, start_timestamp):
     cursor.execute(
-        'SELECT follower FROM username_follows WHERE followee = %s AND UNIX_TIMESTAMP(timestamp) > %s AND userapproved = 0 ORDER BY timestamp DESC;',
+        'SELECT follower FROM username_follows WHERE followee = %s AND ' + \
+        'UNIX_TIMESTAMP(timestamp) > %s AND userapproved = 0 ORDER BY timestamp DESC;',
         (user,
          start_timestamp)
     )
@@ -165,7 +166,8 @@ def get_recent_public_follows(cursor, user, start_timestamp):
 # (Still have to consider the case where user goes from private -> public in the future)
 def get_recent_follow_requests(cursor, user, start_timestamp):
     cursor.execute(
-        'SELECT follower FROM username_follow_requests WHERE followee = %s AND UNIX_TIMESTAMP(timestamp) > %s ORDER BY timestamp DESC;',
+        'SELECT follower FROM username_follow_requests WHERE followee = %s AND ' + \
+        'UNIX_TIMESTAMP(timestamp) > %s ORDER BY timestamp DESC;',
         (user,
          start_timestamp)
     )
@@ -174,7 +176,8 @@ def get_recent_follow_requests(cursor, user, start_timestamp):
 # Get all users that have recently accepted this user's follow reuqest after a particular point in time 
 def get_recent_follow_accepts(cursor, user, start_timestamp):
     cursor.execute(
-        'SELECT followee FROM username_follows WHERE follower = %s AND UNIX_TIMESTAMP(timestamp) > %s AND userapproved = 1 ORDER BY timestamp DESC;',
+        'SELECT followee FROM username_follows WHERE follower = %s AND ' + \
+        'UNIX_TIMESTAMP(timestamp) > %s AND userapproved = 1 ORDER BY timestamp DESC;',
         (user,
          start_timestamp)
     )
