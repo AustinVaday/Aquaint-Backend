@@ -80,21 +80,21 @@ def read_eventlist(db, user):
         events
     )
 
-# Fetch notificaiton-timestamp for user
-def read_eventlist_notif(db, user):
-    # Get raw data
-    response = db.get_item(Key={ 'username': user })
-    
-    # No Events handler
-    if 'Item' not in response: return 0 
-    
-	# If no notificationTimestamp, we create one. 
-    if 'notificationTimestamp' not in response['Item']:
-        write_eventlist_notif(db, user, 0)	
-        return 0
-
-    # Convert raw data to integer val 
-    return response['Item']['notificationTimestamp']
+## Fetch notificaiton-timestamp for user
+#def read_eventlist_notif(db, user):
+#    # Get raw data
+#    response = db.get_item(Key={ 'username': user })
+#    
+#    # No Events handler
+#    if 'Item' not in response: return 0 
+#    
+#	# If no notificationTimestamp, we create one. 
+#    if 'notificationTimestamp' not in response['Item']:
+#        write_eventlist_notif(db, user, 0)	
+#        return 0
+#
+#    # Convert raw data to integer val 
+#    return response['Item']['notificationTimestamp']
 
 # Write new newsfeed to database
 def write_timeline(table, user, timeline_jsons):
@@ -118,18 +118,18 @@ def write_timeline(table, user, timeline_jsons):
             }
         )
 
-# Write new user notification timestamp to eventlist db 
-def write_eventlist_notif(table, user, notification_timestamp):
-    # Update notification timestamp. Assumes notificationTimestamp exists
-    table.update_item(
-        Key={
-            'username': user
-        },
-        UpdateExpression = 'SET notificationTimestamp = :val',
-        ExpressionAttributeValues = {
-            ':val': notification_timestamp
-        }
-    )
+## Write new user notification timestamp to eventlist db 
+#def write_eventlist_notif(table, user, notification_timestamp):
+#    # Update notification timestamp. Assumes notificationTimestamp exists
+#    table.update_item(
+#        Key={
+#            'username': user
+#        },
+#        UpdateExpression = 'SET notificationTimestamp = :val',
+#        ExpressionAttributeValues = {
+#            ':val': notification_timestamp
+#        }
+#    )
 
 # Instantiate MySQL connection
 def mysql_db():
@@ -152,14 +152,33 @@ def get_followees(cursor, user):
     )
 
 # Get all followers of user after a particular point in time
-def get_recent_follows(cursor, user, start_timestamp):
+# Note that we do not include followers that were user-approved. This will be separate
+def get_recent_public_follows(cursor, user, start_timestamp):
     cursor.execute(
-        'SELECT follower FROM username_follows WHERE followee = %s AND UNIX_TIMESTAMP(timestamp) > %s ORDER BY timestamp DESC;',
+        'SELECT follower FROM username_follows WHERE followee = %s AND UNIX_TIMESTAMP(timestamp) > %s AND userapproved = 0 ORDER BY timestamp DESC;',
         (user,
          start_timestamp)
     )
     return [i[0] for i in cursor.fetchall()]
     
+# Get all users that have sent this user a follow request after a particular point in time
+# (Still have to consider the case where user goes from private -> public in the future)
+def get_recent_follow_requests(cursor, user, start_timestamp):
+    cursor.execute(
+        'SELECT follower FROM username_follow_requests WHERE followee = %s AND UNIX_TIMESTAMP(timestamp) > %s ORDER BY timestamp DESC;',
+        (user,
+         start_timestamp)
+    )
+    return [i[0] for i in cursor.fetchall()]
+
+# Get all users that have recently accepted this user's follow reuqest after a particular point in time 
+def get_recent_follow_accepts(cursor, user, start_timestamp):
+    cursor.execute(
+        'SELECT followee FROM username_follows WHERE follower = %s AND UNIX_TIMESTAMP(timestamp) > %s AND userapproved = 1 ORDER BY timestamp DESC;',
+        (user,
+         start_timestamp)
+    )
+    return [i[0] for i in cursor.fetchall()]
 
 # Convert events to json with to_jsonnable function and paginate
 def json_chunk(events, to_jsonnable, max_size):
@@ -250,11 +269,22 @@ def crawl():
         # Detect whether we need to send notifications now 
         if send_push_notifications:
             # Generate list of new followers for push notifications
-            new_followers = get_recent_follows(conns, user, last_read_timestamp)
-            if len(new_followers) > 0:
-                print("new_followers are: %s" % new_followers)
-                # SEND PUSH NOTIFICATION!
-        
+            new_public_followers = get_recent_public_follows(conns, user, last_read_timestamp)
+            if len(new_public_followers) > 0:
+                print("new_followers are: %s" % new_public_followers)
+                # SEND CORRESPONDING PUSH NOTIFICATIONS HERE!
+
+            # Generate list of new follow requests for push notifications
+            new_follow_requests = get_recent_follow_requests(conns, user, last_read_timestamp)
+            if len(new_follow_requests) > 0:
+                print("new_follow_requests are: %s" % new_follow_requests)
+                # SEND CORRESPONDING PUSH NOTIFICATIONS HERE!
+
+            # Generate list of others that have accepted this user's follow requests
+            new_follow_accepts = get_recent_follow_accepts(conns, user, last_read_timestamp)
+            if len(new_follow_accepts) > 0:
+                print("new_follow_accepts are: %s" % new_follow_accepts)
+                # SEND CORRESPONDING PUSH NOTIFICATIONS HERE!
 
 #########> Below code was written before privacy settings implemented. We will attempt to use a better 
 #########> Approach that will work for both
