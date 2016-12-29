@@ -13,6 +13,7 @@ DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
 DEST_TABLE   = 'aquaint-newsfeed'
 NOTIFICATION_PERIOD_SEC = 43200 #12hrs
+NOTIFICATION_TIMESTAMP_FILE = "notificationsLastSentTimestamp.txt"
 
 TIMELINE_LENGTH = 60
 
@@ -20,6 +21,17 @@ TIMELINE_LENGTH = 60
 def get_current_timestamp():
     utc = datetime.utcnow()
     return calendar.timegm(utc.utctimetuple())
+
+# Get the last time we sent notifications to users 
+def get_notifications_last_sent_timestamp():
+    with open(NOTIFICATION_TIMESTAMP_FILE, 'r') as file:
+        return int(file.readline().rstrip())
+
+# Set the last time we sent notifications to users
+def set_notifications_last_sent_timestamp(new_timestamp):
+    with open(NOTIFICATION_TIMESTAMP_FILE, 'w') as file:
+        print("Wrote: %s" % new_timestamp)
+        file.write(str(new_timestamp))
 
 # Instantiate DynamoDB connection
 def dynamo_table(table_name):
@@ -142,11 +154,12 @@ def get_followees(cursor, user):
 # Get all followers of user after a particular point in time
 def get_recent_follows(cursor, user, start_timestamp):
     cursor.execute(
-        'SELECT follower FROM username_follows WHERE followee = %s AND UNIX_TIMESTAMP(timestamp) > %d ORDER BY timestamp DESC;',
-        (user),
-        (start_timestamp)
+        'SELECT follower FROM username_follows WHERE followee = %s AND UNIX_TIMESTAMP(timestamp) > %s ORDER BY timestamp DESC;',
+        (user,
+         start_timestamp)
     )
-    return cursor.fetchall()
+    return [i[0] for i in cursor.fetchall()]
+    
 
 # Convert events to json with to_jsonnable function and paginate
 def json_chunk(events, to_jsonnable, max_size):
@@ -193,6 +206,11 @@ def crawl():
     users = dynamo_scan(source, 'username')
     print('Found %s users' % len(users))
     
+    # Get last notification sent time, via local file on server 
+    last_read_timestamp = get_notifications_last_sent_timestamp()
+    current_timestamp = get_current_timestamp()
+    send_push_notifications = (current_timestamp - last_read_timestamp) > NOTIFICATION_PERIOD_SEC
+
     # Iterate over all users
     for user in users:
         print('Processing %s' % user)
@@ -229,13 +247,14 @@ def crawl():
         # Write constructed newsfeed to database
         write_timeline(dest, user, timeline_jsons)
 
-
-        # Temp val for testing
-        last_read_timestamp = 1481956586
-
-        # Generate list of new followers for push notifications
-        new_followers = get_recent_follows(conns, user, last_read_timestamp)
-        print("new_followers are: %s" % new_followers)
+        # Detect whether we need to send notifications now 
+        if send_push_notifications:
+            # Generate list of new followers for push notifications
+            new_followers = get_recent_follows(conns, user, last_read_timestamp)
+            if len(new_followers) > 0:
+                print("new_followers are: %s" % new_followers)
+                # SEND PUSH NOTIFICATION!
+        
 
 #########> Below code was written before privacy settings implemented. We will attempt to use a better 
 #########> Approach that will work for both
@@ -258,4 +277,10 @@ def crawl():
 #        if did_send_notif:
 #            write_eventlist_notif(source, user, get_current_timestamp())
 
+    
+    if send_push_notifications:
+        set_notifications_last_sent_timestamp(current_timestamp)
+
     print('Done')
+
+
