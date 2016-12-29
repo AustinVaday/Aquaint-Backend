@@ -139,6 +139,15 @@ def get_followees(cursor, user):
         cursor.fetchall()
     )
 
+# Get all followers of user after a particular point in time
+def get_recent_follows(cursor, user, start_timestamp):
+    cursor.execute(
+        'SELECT follower FROM username_follows WHERE followee = %s AND UNIX_TIMESTAMP(timestamp) > %d ORDER BY timestamp DESC;',
+        (user),
+        (start_timestamp)
+    )
+    return cursor.fetchall()
+
 # Convert events to json with to_jsonnable function and paginate
 def json_chunk(events, to_jsonnable, max_size):
     # No events handler
@@ -220,23 +229,33 @@ def crawl():
         # Write constructed newsfeed to database
         write_timeline(dest, user, timeline_jsons)
 
-        notification_timestamp = read_eventlist_notif(source, user) 
-        print("Notification time stamp for user %s is %d" % (user, notification_timestamp)) 
+
+        # Temp val for testing
+        last_read_timestamp = 1481956586
 
         # Generate list of new followers for push notifications
-        new_followers_list = [event.other[0] for event in read_eventlist(source, user) if (event.time - notification_timestamp) > NOTIFICATION_PERIOD_SEC and event.event == 'newfollower']
-        new_followers = set(new_follers_list)
+        new_followers = get_recent_follows(conns, user, last_read_timestamp)
+        print("new_followers are: %s" % new_followers)
 
-        print("new_follers are: %s" % new_followers)
-
-        # PUSH NOTIFICATIONS CODE HERE
-	
-        # Make sure to make use of this variable below 
-        # Will determine whether we write a new notification timestamp or not later in the script
-        did_send_notif = False
-
-        # If we send push notification successfully, update db user with new notification timestamp
-        if did_send_notif:
-            write_eventlist_notif(source, user, get_current_timestamp())
+#########> Below code was written before privacy settings implemented. We will attempt to use a better 
+#########> Approach that will work for both
+#        notification_timestamp = read_eventlist_notif(source, user) 
+#        print("Notification time stamp for user %s is %d" % (user, notification_timestamp)) 
+#
+#        # Generate list of new followers for push notifications
+#        new_followers_list = [event.other[0] for event in read_eventlist(source, user) if (event.time - notification_timestamp) > NOTIFICATION_PERIOD_SEC and event.event == 'newfollower']
+#        new_followers = set(new_follers_list)
+#
+#        print("new_follers are: %s" % new_followers)
+#
+#        # PUSH NOTIFICATIONS CODE HERE
+#	
+#        # Make sure to make use of this variable below 
+#        # Will determine whether we write a new notification timestamp or not later in the script
+#        did_send_notif = False
+#
+#        # If we send push notification successfully, update db user with new notification timestamp
+#        if did_send_notif:
+#            write_eventlist_notif(source, user, get_current_timestamp())
 
     print('Done')
