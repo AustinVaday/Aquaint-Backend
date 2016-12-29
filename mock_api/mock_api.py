@@ -59,12 +59,18 @@ def simplesearch(event, sql):
 
 def follow(event, sql):
     if 'me' not in event: raise RuntimeError("Please specify 'me'.")
-    query = ("INSERT INTO follows (follower, followee) VALUES (" + \
+    if 'userapproved' not in event: 
+        user_approved = 0 
+    else: 
+        user_approved = event['userapproved']
+
+    query = ("INSERT INTO follows (follower, followee, userapproved) VALUES (" + \
             "(SELECT user_index FROM users WHERE username = '{me}'), " + \
-            "(SELECT user_index FROM users WHERE username = '{target}') " + \
-        ");").format(
+            "(SELECT user_index FROM users WHERE username = '{target}'), " + \
+            "({userapproved}));").format(
             me = event['me'],
-            target = event['target']
+            target = event['target'],
+            userapproved = user_approved
         )
     
     return sql_cd(sql, query)
