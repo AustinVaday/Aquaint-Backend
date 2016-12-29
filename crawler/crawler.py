@@ -12,6 +12,7 @@ import sqlconf
 DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
 DEST_TABLE   = 'aquaint-newsfeed'
+DEVICE_TABLE = 'aquaint-devices'
 NOTIFICATION_PERIOD_SEC = 43200 #12hrs
 NOTIFICATION_TIMESTAMP_FILE = "notificationsLastSentTimestamp.txt"
 
@@ -95,6 +96,20 @@ def read_eventlist(db, user):
 #
 #    # Convert raw data to integer val 
 #    return response['Item']['notificationTimestamp']
+
+# Fetch list of user deviceID to send out push notifications
+def read_user_device_list(db, user):
+    # Get raw data
+    response = db.get_item(Key={ 'username': user })
+    
+    # No Events handler
+    if 'Item' not in response: return [] 
+    
+	# If no deviceId 
+    if 'deviceidlist' not in response['Item']: return []
+
+    # Convert raw data to list datastructure 
+    return response['Item']['deviceidlist']
 
 # Write new newsfeed to database
 def write_timeline(table, user, timeline_jsons):
@@ -221,6 +236,7 @@ def crawl():
     # Initialize databases
     source = dynamo_table(SOURCE_TABLE)
     dest   = dynamo_table(DEST_TABLE)
+    device_table = dynamo_table(DEVICE_TABLE)
     conns  = mysql_db()
     print('Connected databases')
     
@@ -271,23 +287,34 @@ def crawl():
 
         # Detect whether we need to send notifications now 
         if send_push_notifications:
+            # Get list of user deviceIDs to send push notifications to
+            user_device_list = read_user_device_list(device_table, user)
+            if len(user_device_list) == 0:
+                # No point in processing the rest if user doesn't have any devices
+                continue
+
+            print("User %s has devices: %s" % (user, user_device_list))
+
             # Generate list of new followers for push notifications
             new_public_followers = get_recent_public_follows(conns, user, last_read_timestamp)
             if len(new_public_followers) > 0:
                 print("new_followers are: %s" % new_public_followers)
                 # SEND CORRESPONDING PUSH NOTIFICATIONS HERE!
+                # for device in user_device_list:
 
             # Generate list of new follow requests for push notifications
             new_follow_requests = get_recent_follow_requests(conns, user, last_read_timestamp)
             if len(new_follow_requests) > 0:
                 print("new_follow_requests are: %s" % new_follow_requests)
                 # SEND CORRESPONDING PUSH NOTIFICATIONS HERE!
+                # for device in user_device_list:
 
             # Generate list of others that have accepted this user's follow requests
             new_follow_accepts = get_recent_follow_accepts(conns, user, last_read_timestamp)
             if len(new_follow_accepts) > 0:
                 print("new_follow_accepts are: %s" % new_follow_accepts)
                 # SEND CORRESPONDING PUSH NOTIFICATIONS HERE!
+                # for device in user_device_list:
 
 #########> Below code was written before privacy settings implemented. We will attempt to use a better 
 #########> Approach that will work for both
