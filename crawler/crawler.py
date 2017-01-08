@@ -3,11 +3,20 @@ import json
 
 import pymysql
 import boto3
-from boto3.dynamodb.conditions import Key
+from boto3.dynamodb.conditions import Key, Attr
+from botocore.exceptions import ClientError
+import time
 from datetime import datetime
 import calendar
 import timeline
 import sqlconf
+
+import decimal
+from apns import APNs, Frame, Payload
+
+# Apple Push Notification: connect from provider to APN
+apns = APNs(use_sandbox=True, cert_file='AquaintPN_cert.pem', key_file='AquaintPN_key.pem')
+
 
 DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
@@ -297,10 +306,14 @@ def crawl():
 
             # Generate list of new followers for push notifications
             new_public_followers = get_recent_public_follows(conns, user, last_read_timestamp)
+
             if len(new_public_followers) > 0:
                 print("new_followers are: %s" % new_public_followers)
                 # SEND CORRESPONDING PUSH NOTIFICATIONS HERE!
                 # for device in user_device_list:
+                for token_hex in user_device_list:
+                    payload = Payload(alert="Hi " + user + ", you have " + len(new_public_followers) + " new public followers! " + new_public_followers, sound="default", badge=1)
+                    apns.gateway_server.send_notification(token_hex, payload)
 
             # Generate list of new follow requests for push notifications
             new_follow_requests = get_recent_follow_requests(conns, user, last_read_timestamp)
@@ -308,14 +321,22 @@ def crawl():
                 print("new_follow_requests are: %s" % new_follow_requests)
                 # SEND CORRESPONDING PUSH NOTIFICATIONS HERE!
                 # for device in user_device_list:
+                for token_hex in user_device_list:
+                    payload = Payload(alert="Hi " + user + ", you have " + len(new_follow_requests) + " new follow requests! " + new_follow_requests, sound="default", badge=1)
+                    apns.gateway_server.send_notification(token_hex, payload)
 
+                
             # Generate list of others that have accepted this user's follow requests
             new_follow_accepts = get_recent_follow_accepts(conns, user, last_read_timestamp)
             if len(new_follow_accepts) > 0:
                 print("new_follow_accepts are: %s" % new_follow_accepts)
                 # SEND CORRESPONDING PUSH NOTIFICATIONS HERE!
                 # for device in user_device_list:
+                for token_hex in user_device_list:
+                    payload = Payload(alert="Hi " + user + ", your follow requests to these " + len(new_follow_accepts) + " users are accepted! " + new_follow_accepts, sound="default", badge=1)
+                    apns.gateway_server.send_notification(token_hex, payload)
 
+                
 #########> Below code was written before privacy settings implemented. We will attempt to use a better 
 #########> Approach that will work for both
 #        notification_timestamp = read_eventlist_notif(source, user) 
