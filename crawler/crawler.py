@@ -314,7 +314,7 @@ def crawl():
                         pn_text = "Hey " + user + ", " + new_public_followers + " is now following you! "
                     else:
                         pn_text = "Hey " + user + ", " + new_public_followers[0] + " and " + str(len(new_public_followers) - 1) + " others are now following you! "
-                    payload = Payload(alert=pn_text, sound="default", badge=1, identifier="newFollower")
+                    payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollower"})
                     apns.gateway_server.send_notification(token_hex, payload)
 
             # Generate list of new follow requests for push notifications
@@ -328,7 +328,7 @@ def crawl():
                         pn_text = "Hey " + user + ", you have a new follow request from " + new_follow_requests + "! "
                     else:
                         pn_text = "Hey " + user + ", you have new follow requests from " + new_follow_requests[0] + " and " + str(len(new_follow_requests) - 1) + " others! "
-                    payload = Payload(alert=pn_text, sound="default", badge=1, identifier="newFollowRequests")
+                    payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollowRequests"})
                     apns.gateway_server.send_notification(token_hex, payload)
 
             # Generate list of others that have accepted this user's follow requests
@@ -342,7 +342,7 @@ def crawl():
                         pn_text = "Hey " + user + ", your follow request to " + new_follow_accepts + " is accepted! "
                     else:
                         pn_text = "Hey " + user + ", your follow requests to " + new_follow_accepts[0] + " and " + str(len(new_follow_accepts) - 1) + " others are accepted! "
-                    payload = Payload(alert=pn_text, sound="default", badge=1, identifier="followRequestAcceptance")
+                    payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"followRequestAcceptance"})
                     apns.gateway_server.send_notification(token_hex, payload)
 
                 
