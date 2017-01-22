@@ -14,9 +14,8 @@ import sqlconf
 import decimal
 from apns import APNs, Frame, Payload
 
-# Apple Push Notification: connect from provider to APN
+# Initializing Apple Push Notification: connect from provider to APN
 apns = APNs(use_sandbox=True, cert_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_cert.pem', key_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_key.pem')
-
 
 DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
@@ -309,38 +308,43 @@ def crawl():
 
             if len(new_public_followers) > 0:
                 print("new_followers are: %s" % new_public_followers)
-                # SEND CORRESPONDING PUSH NOTIFICATIONS HERE!
-                # for device in user_device_list:
+                # Send push notifications for new public followers, for device in user_device_list:
                 for token_hex in user_device_list:
-                    payload = Payload(alert="Hey " + user + ", " + new_public_followers + " are now following you! ", sound="default", badge=1)
+                    if len(new_public_followers) == 1:
+                        pn_text = "Hey " + user + ", " + new_public_followers + " is now following you! "
+                    else:
+                        pn_text = "Hey " + user + ", " + new_public_followers[0] + " and " + (len(new_public_followers) - 1) + " others are now following you! "
+                    payload = Payload(alert=pn_text, sound="default", badge=1, identifier="newFollower")
                     apns.gateway_server.send_notification(token_hex, payload)
-                # TODO: add "someUser and # others" text pattern, and special case of len(new_public_followers) == 1
 
             # Generate list of new follow requests for push notifications
             new_follow_requests = get_recent_follow_requests(conns, user, last_read_timestamp)
+            
             if len(new_follow_requests) > 0:
                 print("new_follow_requests are: %s" % new_follow_requests)
-                # SEND CORRESPONDING PUSH NOTIFICATIONS HERE!
-                # for device in user_device_list:
+                # Send push notifications for new follow requests, for device in user_device_list:
                 for token_hex in user_device_list:
-                    if len(new_follow_requests) != 0:
-                        payload = Payload(alert="Hey " + user + ", you have " + len(new_follow_requests) + " new follow requests from " + new_follow_requests + "! ", sound="default", badge=1)
-                        apns.gateway_server.send_notification(token_hex, payload)
+                    if len(new_follow_requests) == 1:
+                        pn_text = "Hey " + user + ", you have a new follow request from " + new_follow_requests + "! "
                     else:
-                        payload = Payload(alert="Hey " + user + ", you have a new follow request from " + new_follow_requests + "! ", sound="default", badge=1)
-                        apns.gateway_server.send_notification(token_hex, payload)
+                        pn_text = "Hey " + user + ", you have new follow requests from " + new_follow_requests[0] + " and " + (len(new_follow_requests) - 1) + " others! "
+                    payload = Payload(alert=pn_text, sound="default", badge=1, identifier="newFollowRequests")
+                    apns.gateway_server.send_notification(token_hex, payload)
 
-                
             # Generate list of others that have accepted this user's follow requests
             new_follow_accepts = get_recent_follow_accepts(conns, user, last_read_timestamp)
+            
             if len(new_follow_accepts) > 0:
                 print("new_follow_accepts are: %s" % new_follow_accepts)
-                # SEND CORRESPONDING PUSH NOTIFICATIONS HERE!
-                # for device in user_device_list:
+                # Send push notifications for new follow accepts, for device in user_device_list:
                 for token_hex in user_device_list:
-                    payload = Payload(alert="Hey " + user + ", your follow requests to " + new_follow_accepts + " are accepted! ", sound="default", badge=1)
+                    if len(new_follow_accepts) == 1:
+                        pn_text = "Hey " + user + ", your follow request to " + new_follow_accepts + " is accepted! "
+                    else:
+                        pn_text = "Hey " + user + ", your follow requests to " + new_follow_accepts[0] + " and " + (len(new_follow_accepts) - 1) + " others are accepted! "
+                    payload = Payload(alert=pn_text, sound="default", badge=1, identifier="followRequestAcceptance")
                     apns.gateway_server.send_notification(token_hex, payload)
-                    # TODO: add "someUser and # others" text pattern, and special case of len(new_follow_accepts) == 1
+
                 
 #########> Below code was written before privacy settings implemented. We will attempt to use a better 
 #########> Approach that will work for both
