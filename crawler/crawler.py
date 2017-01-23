@@ -14,8 +14,8 @@ import sqlconf
 import decimal
 from apns import APNs, Frame, Payload
 
-# Initializing Apple Push Notification: connect from provider to APN
-apns = APNs(use_sandbox=True, cert_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_cert.pem', key_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_key.pem')
+# Initializing Apple Push Notification: connect from provider to APN. A key file without passphase is used here for unattended script execution.
+apns = APNs(use_sandbox=True, cert_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_cert.pem', key_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_key_noenc.pem')
 
 DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
