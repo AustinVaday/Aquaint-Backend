@@ -3,16 +3,26 @@ import json
 
 import pymysql
 import boto3
-from boto3.dynamodb.conditions import Key
+from boto3.dynamodb.conditions import Key, Attr
+from botocore.exceptions import ClientError
+import time
 from datetime import datetime
 import calendar
 import timeline
 import sqlconf
 
+import decimal
+from apns import APNs, Frame, Payload
+
+# Initializing Apple Push Notification: connect from provider to APN. A key file without passphase is used here for unattended script execution.
+apns = APNs(use_sandbox=True, cert_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_cert.pem', key_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_key_noenc.pem')
+
 DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
 DEST_TABLE   = 'aquaint-newsfeed'
+DEVICE_TABLE = 'aquaint-devices'
 NOTIFICATION_PERIOD_SEC = 43200 #12hrs
+NOTIFICATION_TIMESTAMP_FILE = "notificationsLastSentTimestamp.txt"
 
 TIMELINE_LENGTH = 60
 
@@ -20,6 +30,17 @@ TIMELINE_LENGTH = 60
 def get_current_timestamp():
     utc = datetime.utcnow()
     return calendar.timegm(utc.utctimetuple())
+
+# Get the last time we sent notifications to users 
+def get_notifications_last_sent_timestamp():
+    with open(NOTIFICATION_TIMESTAMP_FILE, 'r') as file:
+        return int(file.readline().rstrip())
+
+# Set the last time we sent notifications to users
+def set_notifications_last_sent_timestamp(new_timestamp):
+    with open(NOTIFICATION_TIMESTAMP_FILE, 'w') as file:
+        print("Wrote: %s" % new_timestamp)
+        file.write(str(new_timestamp))
 
 # Instantiate DynamoDB connection
 def dynamo_table(table_name):
@@ -68,21 +89,35 @@ def read_eventlist(db, user):
         events
     )
 
-# Fetch notificaiton-timestamp for user
-def read_eventlist_notif(db, user):
+## Fetch notificaiton-timestamp for user
+#def read_eventlist_notif(db, user):
+#    # Get raw data
+#    response = db.get_item(Key={ 'username': user })
+#    
+#    # No Events handler
+#    if 'Item' not in response: return 0 
+#    
+#	# If no notificationTimestamp, we create one. 
+#    if 'notificationTimestamp' not in response['Item']:
+#        write_eventlist_notif(db, user, 0)	
+#        return 0
+#
+#    # Convert raw data to integer val 
+#    return response['Item']['notificationTimestamp']
+
+# Fetch list of user deviceID to send out push notifications
+def read_user_device_list(db, user):
     # Get raw data
     response = db.get_item(Key={ 'username': user })
     
     # No Events handler
-    if 'Item' not in response: return 0 
+    if 'Item' not in response: return [] 
     
-	# If no notificationTimestamp, we create one. 
-    if 'notificationTimestamp' not in response['Item']:
-        write_eventlist_notif(db, user, 0)	
-        return 0
+	# If no deviceId 
+    if 'deviceidlist' not in response['Item']: return []
 
-    # Convert raw data to integer val 
-    return response['Item']['notificationTimestamp']
+    # Convert raw data to list datastructure 
+    return response['Item']['deviceidlist']
 
 # Write new newsfeed to database
 def write_timeline(table, user, timeline_jsons):
@@ -106,18 +141,18 @@ def write_timeline(table, user, timeline_jsons):
             }
         )
 
-# Write new user notification timestamp to eventlist db 
-def write_eventlist_notif(table, user, notification_timestamp):
-    # Update notification timestamp. Assumes notificationTimestamp exists
-    table.update_item(
-        Key={
-            'username': user
-        },
-        UpdateExpression = 'SET notificationTimestamp = :val',
-        ExpressionAttributeValues = {
-            ':val': notification_timestamp
-        }
-    )
+## Write new user notification timestamp to eventlist db 
+#def write_eventlist_notif(table, user, notification_timestamp):
+#    # Update notification timestamp. Assumes notificationTimestamp exists
+#    table.update_item(
+#        Key={
+#            'username': user
+#        },
+#        UpdateExpression = 'SET notificationTimestamp = :val',
+#        ExpressionAttributeValues = {
+#            ':val': notification_timestamp
+#        }
+#    )
 
 # Instantiate MySQL connection
 def mysql_db():
@@ -138,6 +173,38 @@ def get_followees(cursor, user):
         lambda row: row[0],
         cursor.fetchall()
     )
+
+# Get all followers of user after a particular point in time
+# Note that we do not include followers that were user-approved. This will be separate
+def get_recent_public_follows(cursor, user, start_timestamp):
+    cursor.execute(
+        'SELECT follower FROM username_follows WHERE followee = %s AND ' + \
+        'UNIX_TIMESTAMP(timestamp) > %s AND userapproved = 0 ORDER BY timestamp DESC;',
+        (user,
+         start_timestamp)
+    )
+    return [i[0] for i in cursor.fetchall()]
+    
+# Get all users that have sent this user a follow request after a particular point in time
+# (Still have to consider the case where user goes from private -> public in the future)
+def get_recent_follow_requests(cursor, user, start_timestamp):
+    cursor.execute(
+        'SELECT follower FROM username_follow_requests WHERE followee = %s AND ' + \
+        'UNIX_TIMESTAMP(timestamp) > %s ORDER BY timestamp DESC;',
+        (user,
+         start_timestamp)
+    )
+    return [i[0] for i in cursor.fetchall()]
+
+# Get all users that have recently accepted this user's follow reuqest after a particular point in time 
+def get_recent_follow_accepts(cursor, user, start_timestamp):
+    cursor.execute(
+        'SELECT followee FROM username_follows WHERE follower = %s AND ' + \
+        'UNIX_TIMESTAMP(timestamp) > %s AND userapproved = 1 ORDER BY timestamp DESC;',
+        (user,
+         start_timestamp)
+    )
+    return [i[0] for i in cursor.fetchall()]
 
 # Convert events to json with to_jsonnable function and paginate
 def json_chunk(events, to_jsonnable, max_size):
@@ -177,6 +244,7 @@ def crawl():
     # Initialize databases
     source = dynamo_table(SOURCE_TABLE)
     dest   = dynamo_table(DEST_TABLE)
+    device_table = dynamo_table(DEVICE_TABLE)
     conns  = mysql_db()
     print('Connected databases')
     
@@ -184,6 +252,11 @@ def crawl():
     users = dynamo_scan(source, 'username')
     print('Found %s users' % len(users))
     
+    # Get last notification sent time, via local file on server 
+    last_read_timestamp = get_notifications_last_sent_timestamp()
+    current_timestamp = get_current_timestamp()
+    send_push_notifications = (current_timestamp - last_read_timestamp) > NOTIFICATION_PERIOD_SEC
+
     # Iterate over all users
     for user in users:
         print('Processing %s' % user)
@@ -220,23 +293,84 @@ def crawl():
         # Write constructed newsfeed to database
         write_timeline(dest, user, timeline_jsons)
 
-        notification_timestamp = read_eventlist_notif(source, user) 
-        print("Notification time stamp for user %s is %d" % (user, notification_timestamp)) 
+        # Detect whether we need to send notifications now 
+        if send_push_notifications:
+            # Get list of user deviceIDs to send push notifications to
+            user_device_list = read_user_device_list(device_table, user)
+            if len(user_device_list) == 0:
+                # No point in processing the rest if user doesn't have any devices
+                continue
 
-        # Generate list of new followers for push notifications
-        new_followers_list = [event.other[0] for event in read_eventlist(source, user) if (event.time - notification_timestamp) > NOTIFICATION_PERIOD_SEC and event.event == 'newfollower']
-        new_followers = set(new_follers_list)
+            print("User %s has devices: %s" % (user, user_device_list))
 
-        print("new_follers are: %s" % new_followers)
+            # Generate list of new followers for push notifications
+            new_public_followers = get_recent_public_follows(conns, user, last_read_timestamp)
 
-        # PUSH NOTIFICATIONS CODE HERE
-	
-        # Make sure to make use of this variable below 
-        # Will determine whether we write a new notification timestamp or not later in the script
-        did_send_notif = False
+            if len(new_public_followers) > 0:
+                print("new_followers are: %s" % new_public_followers)
+                # Send push notifications for new public followers, for device in user_device_list:
+                for token_hex in user_device_list:
+                    if len(new_public_followers) == 1:
+                        pn_text = "Hey " + user + ", " + new_public_followers + " is now following you! "
+                    else:
+                        pn_text = "Hey " + user + ", " + new_public_followers[0] + " and " + str(len(new_public_followers) - 1) + " others are now following you! "
+                    payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollower"})
+                    apns.gateway_server.send_notification(token_hex, payload)
 
-        # If we send push notification successfully, update db user with new notification timestamp
-        if did_send_notif:
-            write_eventlist_notif(source, user, get_current_timestamp())
+            # Generate list of new follow requests for push notifications
+            new_follow_requests = get_recent_follow_requests(conns, user, last_read_timestamp)
+            
+            if len(new_follow_requests) > 0:
+                print("new_follow_requests are: %s" % new_follow_requests)
+                # Send push notifications for new follow requests, for device in user_device_list:
+                for token_hex in user_device_list:
+                    if len(new_follow_requests) == 1:
+                        pn_text = "Hey " + user + ", you have a new follow request from " + new_follow_requests + "! "
+                    else:
+                        pn_text = "Hey " + user + ", you have new follow requests from " + new_follow_requests[0] + " and " + str(len(new_follow_requests) - 1) + " others! "
+                    payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollowRequests"})
+                    apns.gateway_server.send_notification(token_hex, payload)
+
+            # Generate list of others that have accepted this user's follow requests
+            new_follow_accepts = get_recent_follow_accepts(conns, user, last_read_timestamp)
+            
+            if len(new_follow_accepts) > 0:
+                print("new_follow_accepts are: %s" % new_follow_accepts)
+                # Send push notifications for new follow accepts, for device in user_device_list:
+                for token_hex in user_device_list:
+                    if len(new_follow_accepts) == 1:
+                        pn_text = "Hey " + user + ", your follow request to " + new_follow_accepts + " is accepted! "
+                    else:
+                        pn_text = "Hey " + user + ", your follow requests to " + new_follow_accepts[0] + " and " + str(len(new_follow_accepts) - 1) + " others are accepted! "
+                    payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"followRequestAcceptance"})
+                    apns.gateway_server.send_notification(token_hex, payload)
+
+                
+#########> Below code was written before privacy settings implemented. We will attempt to use a better 
+#########> Approach that will work for both
+#        notification_timestamp = read_eventlist_notif(source, user) 
+#        print("Notification time stamp for user %s is %d" % (user, notification_timestamp)) 
+#
+#        # Generate list of new followers for push notifications
+#        new_followers_list = [event.other[0] for event in read_eventlist(source, user) if (event.time - notification_timestamp) > NOTIFICATION_PERIOD_SEC and event.event == 'newfollower']
+#        new_followers = set(new_follers_list)
+#
+#        print("new_follers are: %s" % new_followers)
+#
+#        # PUSH NOTIFICATIONS CODE HERE
+#	
+#        # Make sure to make use of this variable below 
+#        # Will determine whether we write a new notification timestamp or not later in the script
+#        did_send_notif = False
+#
+#        # If we send push notification successfully, update db user with new notification timestamp
+#        if did_send_notif:
+#            write_eventlist_notif(source, user, get_current_timestamp())
+
+    
+    if send_push_notifications:
+        set_notifications_last_sent_timestamp(current_timestamp)
 
     print('Done')
+
+
