@@ -1,0 +1,3 @@
+[submodule "PyAPNs"]
+	path = PyAPNs
+	url = https://github.com/maxwyb/PyAPNs.git
