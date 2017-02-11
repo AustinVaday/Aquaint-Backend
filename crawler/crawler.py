@@ -14,6 +14,8 @@ import sqlconf
 import decimal
 from apns import APNs, Frame, Payload
 
+import socket, errno
+
 # Initializing Apple Push Notification: connect from provider to APN. A key file without passphase is used here for unattended script execution.
 apns = APNs(use_sandbox=True, cert_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_cert.pem', key_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_key_noenc.pem')
 
@@ -25,6 +27,7 @@ NOTIFICATION_PERIOD_SEC = 43200 #12hrs
 NOTIFICATION_TIMESTAMP_FILE = "notificationsLastSentTimestamp.txt"
 
 TIMELINE_LENGTH = 60
+MAX_NUM_EVENTS = 15
 
 # Return unix timestamp UTC time
 def get_current_timestamp():
@@ -207,7 +210,7 @@ def get_recent_follow_accepts(cursor, user, start_timestamp):
     return [i[0] for i in cursor.fetchall()]
 
 # Convert events to json with to_jsonnable function and paginate
-def json_chunk(events, to_jsonnable, max_size):
+def json_chunk(events, to_jsonnable, max_size, max_num_events):
     # No events handler
     if len(events) == 0: return ['[]']
 
@@ -219,7 +222,8 @@ def json_chunk(events, to_jsonnable, max_size):
     )
     avg_event_len = int(total_len / len(events))
     events_per_record = int(max_size / avg_event_len) - 1
-    
+    events_per_record = min(events_per_record, max_num_events)    
+
     # Paginate events based on JSON size estimate
     event_partitions = [
         events[i:i+events_per_record] for i in range(
@@ -255,7 +259,9 @@ def crawl():
     # Get last notification sent time, via local file on server 
     last_read_timestamp = get_notifications_last_sent_timestamp()
     current_timestamp = get_current_timestamp()
-    send_push_notifications = (current_timestamp - last_read_timestamp) > NOTIFICATION_PERIOD_SEC
+    #send_push_notifications = (current_timestamp - last_read_timestamp) > NOTIFICATION_PERIOD_SEC
+    send_push_notifications = True
+    print "It's time to send push notifications? " + str(send_push_notifications)
 
     # Iterate over all users
     for user in users:
@@ -287,7 +293,8 @@ def crawl():
         timeline_jsons = json_chunk(
             timeline_result,
             lambda event: event.__dict__,
-            DYNAMO_MAX_BYTES
+            DYNAMO_MAX_BYTES,
+            MAX_NUM_EVENTS
         )
         
         # Write constructed newsfeed to database
