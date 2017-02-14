@@ -17,7 +17,10 @@ from apns import APNs, Frame, Payload
 import socket, errno
 
 # Initializing Apple Push Notification: connect from provider to APN. A key file without passphase is used here for unattended script execution.
-apns = APNs(use_sandbox=True, cert_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_cert.pem', key_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_key_noenc.pem')
+#apns = APNs(use_sandbox=True, cert_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_cert.pem', key_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_key_noenc.pem')
+apns = APNs(use_sandbox=False,
+            cert_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_cert.pem',
+            key_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_key_noenc.pem')
 
 DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
@@ -324,9 +327,10 @@ def crawl():
                     payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollower"})
                     try:
                         apns.gateway_server.send_notification(token_hex, payload)
+                        print "Send new_public_followers notification to " + user + " with device ID " + token_hex
                     except socket.error, e:
                         if e[0] == errno.EPIPE:
-                            print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex;
+                            print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex
 
             # Generate list of new follow requests for push notifications
             new_follow_requests = get_recent_follow_requests(conns, user, last_read_timestamp)
@@ -342,6 +346,7 @@ def crawl():
                     payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollowRequests"})
                     try:
                         apns.gateway_server.send_notification(token_hex, payload)
+                        print "Send new_follow_requests notification to " + user + " with device ID " + token_hex
                     except socket.error, e:
                         if e[0] == errno.EPIPE:
                             print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex;
@@ -360,6 +365,7 @@ def crawl():
                     payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"followRequestAcceptance"})
                     try:
                         apns.gateway_server.send_notification(token_hex, payload)
+                        print "Send new_follow_accepts notification to " + user + " with device ID " + token_hex
                     except socket.error, e:
                         if e[0] == errno.EPIPE:
                             print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex;
