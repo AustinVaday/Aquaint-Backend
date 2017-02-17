@@ -2,8 +2,8 @@ import time
 from apns import APNs, Frame, Payload
 
 apns = APNs(use_sandbox=True,
-            cert_file='/Users/Max/Dropbox/Aquaint/PyAPNs-keys-Distribution/AquaintPN_Distribution_cert.pem',
-            key_file='/Users/Max/Dropbox/Aquaint/PyAPNs-keys-Distribution/AquaintPN_Distribution_key_noenc.pem')
+            cert_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_cert.pem',
+            key_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_key_noenc.pem')
 
 #token_hex = '5e41aa37230ef45d86b23c349fc066bf91fd035bd1886ce2ef60f566656df2af'
 #payload = Payload(alert="PyAPNs notification testing in Python.", sound="default", badge=1)
