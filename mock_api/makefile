@@ -12,6 +12,6 @@ venv/bin/activate:
 
 zip:
 	-zip -u ../bin/mock_api.zip mock_api.py sqlconf.py
-	-cd venv/lib/python2.7/site-packages/; zip -ru ../../../../../bin/mock_api.zip pymysql unirest
+	-cd venv/lib/python2.7/site-packages/; zip -ru ../../../../../bin/mock_api.zip pymysql requests 
 
 .PHONY: required-programs venv zip

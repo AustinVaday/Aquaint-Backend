@@ -1,4 +1,4 @@
-import pymysql, sqlconf, unirest
+import pymysql, sqlconf, requests 
 
 def sql_select(sql, query):
     cursor = sql.cursor()

@@ -1,2 +1,2 @@
 pymysql
-unirest
+requests
