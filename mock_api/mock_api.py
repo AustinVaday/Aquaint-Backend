@@ -1,4 +1,4 @@
-import pymysql, sqlconf
+import pymysql, sqlconf, unirest
 
 def sql_select(sql, query):
     cursor = sql.cursor()
@@ -246,6 +246,19 @@ def didISendFollowRequest(event, sql):
     
     return sql_select(sql, query)[0][0]
 
+# NOTE: sql parameter not needed. Added for consistency
+def createScanCodeForUser(event, sql): 
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+
+    # Call unitag API to get HTTP response for scan code
+    response = unirest.get("https://unitag-qr-code-generation.p.mashape.com/api?data=%7B%22TYPE%22%3A%22text%22%2C%22DATA%22%3A%7B%22TEXT%22%3A%22Hello+World!%22%7D%7D&setting=%7B%22LAYOUT%22%3A%7B%22COLORBG%22%3A%22ffffff%22%2C%22GRADIENT_TYPE%22%3A%22NO_GR%22%2C%22COLOR1%22%3A%22000000%22%7D%2C%22EYES%22%3A%7B%22EYE_TYPE%22%3A%22Simple%22%7D%2C%22E%22%3A%22M%22%2C%22BODY_TYPE%22%3A0%7D",
+        headers={
+          "X-Mashape-Key": "3AQc18gTaJmshmHWJWfKnzKtNhDEp1HcAVwjsnhOAxrcaYjCn8"
+        }
+    )
+
+    return response.body
+
 dispatch = {
     'adduser':                  adduser,
     'updatern':                 updatern,
@@ -266,7 +279,8 @@ dispatch = {
     'getFollowerRequestsDict':  getFollowerRequestsDict,
     'getFolloweeRequestsDict':  getFolloweeRequestsDict,
     'doIFollow':       	        doIFollow,
-    'didISendFollowRequest':    didISendFollowRequest
+    'didISendFollowRequest':    didISendFollowRequest,
+    'createScanCodeForUser':    createScanCodeForUser
 }
 
 
