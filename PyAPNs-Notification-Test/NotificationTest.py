@@ -8,7 +8,7 @@ apns = APNs(use_sandbox=True,
 #token_hex = '5e41aa37230ef45d86b23c349fc066bf91fd035bd1886ce2ef60f566656df2af'
 #payload = Payload(alert="PyAPNs notification testing in Python.", sound="default", badge=1)
 
-sending_devices = ['5e41aa37230ef45d86b23c349fc066bf91fd035bd1886ce2ef60f566656df2af']
+sending_devices = ['d5fd0dd88970332f6898accb0d7d4a8e97878be3b3e469bedc5911d4647af4aa']
 
 for token_hex in sending_devices:
     pn_text1 = "PyAPNs Notification Test: newFollower"
