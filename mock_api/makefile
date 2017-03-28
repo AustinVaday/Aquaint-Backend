@@ -1,3 +1,4 @@
+
 all: required-programs venv zip
 
 required-programs:
@@ -12,6 +13,5 @@ venv/bin/activate:
 
 zip:
 	-zip -u ../bin/mock_api.zip AquaintAnalytics.py mock_api.py sqlconf.py
-	-cd venv/lib/python2.7/site-packages/; zip -ru ../../../../../bin/mock_api.zip apiclient oauth2client httplib2 googleapiclient pymysql boto3 requests six.py uritemplate pyasn1_modules pyasn1 
-
+	-cd venv/lib/python2.7/site-packages/; zip -ru ../../../../../bin/mock_api.zip ./* 
 .PHONY: required-programs venv zip
