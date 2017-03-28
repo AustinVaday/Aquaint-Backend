@@ -26,7 +26,7 @@ DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
 DEST_TABLE   = 'aquaint-newsfeed'
 DEVICE_TABLE = 'aquaint-devices'
-NOTIFICATION_PERIOD_SEC = 43200 #12hrs
+NOTIFICATION_PERIOD_SEC = 600 #10 minutes for testing
 NOTIFICATION_TIMESTAMP_FILE = "notificationsLastSentTimestamp.txt"
 
 TIMELINE_LENGTH = 60
