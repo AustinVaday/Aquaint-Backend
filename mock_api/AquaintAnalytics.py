@@ -30,7 +30,6 @@ def get_service(api_name, api_version, scope, key_file_location,
   Returns:
     A service that is connected to the specified API.
   """
-
   credentials = ServiceAccountCredentials.from_json_keyfile_name(
     key_file_location, scopes=scope)
 
@@ -41,34 +40,52 @@ def get_service(api_name, api_version, scope, key_file_location,
 
   return service
 
+def setup_and_get_service():
+  # Define the auth scopes to request.
+  scope = ['https://www.googleapis.com/auth/analytics.readonly']
+
+  # Use the developer console and replace the values with your
+  # service account email and relative location of your key file.
+  service_account_email = 'aquaint-service-account@aquaint-analytics.iam.gserviceaccount.com'
+  key_file_location = 'Aquaint-Analytics-acba58fc01fc.json'
+
+  # Authenticate and construct service.
+  return get_service('analytics', 'v4', scope, key_file_location,
+    service_account_email)
+    
 # Return single number to reflect total number of page views for a user
-def get_user_page_views(service, username):
+def get_user_page_views(username):
+  service = setup_and_get_service()
   view_desktop = retrieve_pageview_report(service, '/user/' + username + '/')
   view_mobile = retrieve_pageview_report(service, '/user/' + username + '/iOS')
   return int(view_desktop) + int(view_mobile)
 
 # Return single number to reflect number of total engagements for all platforms combined
-def get_user_total_engagements(service, username):
+def get_user_total_engagements(username):
+  service = setup_and_get_service()
   click_desktop = retrieve_total_events_report(service, '/user/' + username + '/')
   click_mobile = retrieve_total_events_report(service, '/user/' + username + '/iOS')
   return int(click_desktop) + int(click_mobile)
 
 # Return single number to reflect number of engagments for just 1 social platform
-def get_user_single_engagements(service, username, social_platform):
+def get_user_single_engagements(username, social_platform):
+  service = setup_and_get_service()
   click_desktop_single = retrieve_single_event_report(service, '/user/' + username + '/', social_platform)
   click_mobile_single = retrieve_single_event_report(service, '/user/' + username + '/iOS', social_platform)
   return int(click_desktop_single) + int(click_mobile_single)
 
 # Return dictionary of social platform -> engagement count for all given social platforms
-def get_user_total_engagements_breakdown(service, username, social_platform_list):
+def get_user_total_engagements_breakdown(username, social_platform_list):
+  service = setup_and_get_service()
   engagements_dict = dict() 
   for social_platform in social_platform_list:
-    social_platform_engagements = get_user_single_engagements(service, username, social_platform)
+    social_platform_engagements = get_user_single_engagements(username, social_platform)
     engagements_dict[social_platform] = social_platform_engagements
   return engagements_dict 
 
 # Return list of tuplies of top N locations (currently just cities)
-def get_user_page_views_locations(service, username, max_results):
+def get_user_page_views_locations(username, max_results):
+  service = setup_and_get_service()
   location_dict_web = retrieve_pageview_locations_report(service, '/user/' + username + '/', max_results)
   location_dict_mobile = retrieve_pageview_locations_report(service, '/user/' + username + '/iOS', max_results)
   return sorted_tuple_list_desc(union_dict(location_dict_web, location_dict_mobile))
@@ -280,28 +297,15 @@ def print_results(results):
 
 
 def main():
-  # Define the auth scopes to request.
-  scope = ['https://www.googleapis.com/auth/analytics.readonly']
-
-  # Use the developer console and replace the values with your
-  # service account email and relative location of your key file.
-  service_account_email = 'aquaint-service-account@aquaint-analytics.iam.gserviceaccount.com'
-  key_file_location = 'Aquaint-Analytics-acba58fc01fc.json'
-
-  # Authenticate and construct service.
-  service = get_service('analytics', 'v4', scope, key_file_location,
-    service_account_email)
-  #response = get_report(service)
-
   # How many page views does Navid get, including Aquaint-Web and Aquaint-iOS?
   username = 'navid'
-  user_clicks = get_user_page_views(service, username)
+  user_clicks = get_user_page_views(username)
   print "User " + username + " has " + str(user_clicks) + " Impressions."
 #
 #  eng_dict = get_user_total_engagements_breakdown(service, username, ['instagram', 'facebook', 'snapchat'])
 #  print "User engagement dictionary"
 #  print eng_dict
-  dicto = get_user_page_views_locations(service, username, 10)
+  dicto = get_user_page_views_locations(username, 10)
   print "DICTIONARY:"
   print dicto
 

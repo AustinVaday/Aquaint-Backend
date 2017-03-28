@@ -14,7 +14,6 @@ def sql_cd(sql, query):
     sql.commit()
     return count
 
-
 def adduser(event, sql):
     if 'realname' not in event: raise RuntimeError("Please specify 'realname'.")
     
@@ -272,28 +271,55 @@ def createScanCodeForUser(event, sql):
     else:
         return -1
 
+def getUserPageViews(event, sql):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+    return AquaintAnalytics.get_user_page_views(event["target"])
+
+def getUserTotalEngagements(event, sql):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+    return AquaintAnalytics.get_user_total_engagements(event["target"])
+
+def getUserSingleEngagements(event, sql):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+    return AquaintAnalytics.get_user_single_engagements(event["target"])
+
+def getUserTotalEngagementsBreakdown(event, sql):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+    if 'social_list' not in event: raise RuntimeError("Please specify 'social_list'.")
+    return AquaintAnalytics.get_user_total_engagements_breakdown(event["target"])
+
+def getUserPageViewsLocations(event, sql):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+    if 'max_results' not in event: raise RuntimeError("Please specify 'max_results'.")
+    return AquaintAnalytics.get_user_total_engagements_breakdown(event["target"], event["max_results"])
+
 dispatch = {
-    'adduser':                  adduser,
-    'updatern':                 updatern,
-    'simplesearch':             simplesearch,
-    'follow':                   follow,
-    'unfollow':                 unfollow,
-    'followRequest':            followRequest,
-    'unfollowRequest':          unfollowRequest,
-    'getNumFollowers':          getNumFollowers,
-    'getNumFollowees':          getNumFollowees,
-    'getNumFollowRequests':     getNumFollowRequests,
-    'getFollowers':             getFollowers,
-    'getFollowees':             getFollowees,
-    'getFollowersDict':         getFollowersDict,
-    'getFolloweesDict':         getFolloweesDict,
-    'getFollowerRequests':      getFollowerRequests,
-    'getFolloweeRequests':      getFolloweeRequests,
-    'getFollowerRequestsDict':  getFollowerRequestsDict,
-    'getFolloweeRequestsDict':  getFolloweeRequestsDict,
-    'doIFollow':       	        doIFollow,
-    'didISendFollowRequest':    didISendFollowRequest,
-    'createScanCodeForUser':    createScanCodeForUser
+    'adduser':                          adduser,
+    'updatern':                         updatern,
+    'simplesearch':                     simplesearch,
+    'follow':                           follow,
+    'unfollow':                         unfollow,
+    'followRequest':                    followRequest,
+    'unfollowRequest':                  unfollowRequest,
+    'getNumFollowers':                  getNumFollowers,
+    'getNumFollowees':                  getNumFollowees,
+    'getNumFollowRequests':             getNumFollowRequests,
+    'getFollowers':                     getFollowers,
+    'getFollowees':                     getFollowees,
+    'getFollowersDict':                 getFollowersDict,
+    'getFolloweesDict':                 getFolloweesDict,
+    'getFollowerRequests':              getFollowerRequests,
+    'getFolloweeRequests':              getFolloweeRequests,
+    'getFollowerRequestsDict':          getFollowerRequestsDict,
+    'getFolloweeRequestsDict':          getFolloweeRequestsDict,
+    'doIFollow':       	                doIFollow,
+    'didISendFollowRequest':            didISendFollowRequest,
+    'createScanCodeForUser':            createScanCodeForUser,
+    'getUserPageViews':                 getUserPageViews,
+    'getUserTotalEngagements':          getUserTotalEngagements,
+    'getUserSingleEngagements':         getUserSingleEngagements,
+    'getUserTotalEngagementsBreakdown': getUserTotalEngagementsBreakdown,
+    'getUserPageViewsLocations':        getUserPageViewsLocations
 }
 
 
