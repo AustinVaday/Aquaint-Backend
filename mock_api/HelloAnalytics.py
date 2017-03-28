@@ -39,11 +39,31 @@ def get_service(api_name, api_version, scope, key_file_location,
 
   return service
 
-
+# Return single number to reflect total number of page views for a user
 def get_user_page_views(service, username):
-  click_desktop = retrieve_pageview_report(service, '/user/' + username + '/')
-  click_mobile = retrieve_pageview_report(service, '/user/' + username + '/iOS')
-  return str(int(click_desktop) + int(click_mobile))
+  view_desktop = retrieve_pageview_report(service, '/user/' + username + '/')
+  view_mobile = retrieve_pageview_report(service, '/user/' + username + '/iOS')
+  return int(view_desktop) + int(view_mobile)
+
+# Return single number to reflect number of total engagements for all platforms combined
+def get_user_total_engagements(service, username):
+  click_desktop = retrieve_total_events_report(service, '/user/' + username + '/')
+  click_mobile = retrieve_total_events_report(service, '/user/' + username + '/iOS')
+  return int(click_desktop) + int(click_mobile)
+
+# Return single number to reflect number of engagments for just 1 social platform
+def get_user_single_engagements(service, username, social_platform):
+  click_desktop_single = retrieve_single_event_report(service, '/user/' + username + '/', social_platform)
+  click_mobile_single = retrieve_single_event_report(service, '/user/' + username + '/iOS', social_platform)
+  return int(click_desktop_single) + int(click_mobile_single)
+
+# Return dictionary of social platform -> engagement count for all given social platforms
+def get_user_total_engagements_breakdown(service, username, social_platform_list):
+  engagements_dict = dict() 
+  for social_platform in social_platform_list:
+    social_platform_engagements = get_user_single_engagements(service, username, social_platform)
+    engagements_dict[social_platform] = social_platform_engagements
+  return engagements_dict 
 
 # get report of a page view query similar to that in Query Explorer
 # Use the Analytics Service Object to query the Analytics Reporting API v4
@@ -63,12 +83,51 @@ def retrieve_pageview_report(service, webpage_url):
         }]
     }
   ).execute()
+  print "sessions-pagePath for " + webpage_url + ": " + str(response)
+  # Parse the Core Reporting response dictionary and return the result integer
+  return parse_response_first_val(response)
+
+def retrieve_total_events_report(service, webpage_url):
+  response = service.reports().batchGet(
+    body={
+      'reportRequests' : [
+        {
+          # On the format of fields used in Query Explorer, see:
+          # https://developers.google.com/analytics/devguides/reporting/core/v4/samples
+          # https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet
+          'viewId': VIEW_ID,
+          'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
+          'metrics': [{'expression': 'ga:totalEvents'}],
+          'dimensions': [{'name': 'ga:pagePath'}],
+          'filtersExpression': ('ga:pagePath==' + webpage_url)
+        }]
+    }
+  ).execute()
   print "totalEvents-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
-  return parse_pageview_response(response)
+  return parse_response_first_val(response)
 
+def retrieve_single_event_report(service, webpage_url, social_platform):
+  response = service.reports().batchGet(
+    body={
+      'reportRequests' : [
+        {
+          # On the format of fields used in Query Explorer, see:
+          # https://developers.google.com/analytics/devguides/reporting/core/v4/samples
+          # https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet
+          'viewId': VIEW_ID,
+          'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
+          'metrics': [{'expression': 'ga:totalEvents'}],
+          'dimensions': [{'name': 'ga:pagePath'},{'name': 'ga:eventAction'},{'name': 'ga:eventLabel'}],
+          'filtersExpression': ('ga:pagePath==' + webpage_url + ';ga:eventAction==click;ga:eventLabel==' + social_platform)
+        }]
+    }
+  ).execute()
+  print "single-pagePath for " + webpage_url + " and " + social_platform + ": " + str(response)
+  # Parse the Core Reporting response dictionary and return the result integer
+  return parse_response_first_val(response)
 
-def parse_pageview_response(response):
+def parse_response_first_val(response):
   # Parses and prints the Analytics Reporting API V4 response
   # Here, we return the first value in the response, as only one value is expected
   for report in response.get('reports', []):
@@ -164,10 +223,11 @@ def main():
   # How many page views does Navid get, including Aquaint-Web and Aquaint-iOS?
   username = 'navid'
   user_clicks = get_user_page_views(service, username)
-  print "User " + username + " has " + user_clicks + " Impressions."
-  #profile = get_first_profile_id(service)
-  #print_results(get_results(service, profile))
+  print "User " + username + " has " + str(user_clicks) + " Impressions."
 
+  eng_dict = get_user_total_engagements_breakdown(service, username, ['instagram', 'facebook', 'snapchat'])
+  print "User engagement dictionary"
+  print eng_dict
 
 if __name__ == '__main__':
   main()
