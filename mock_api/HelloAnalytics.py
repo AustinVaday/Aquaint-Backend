@@ -57,7 +57,7 @@ def retrieve_pageview_report(service, webpage_url):
           # https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet
           'viewId': VIEW_ID,
           'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
-          'metrics': [{'expression': 'ga:totalEvents'}],
+          'metrics': [{'expression': 'ga:sessions'}],
           'dimensions': [{'name': 'ga:pagePath'}],
           'filtersExpression': ('ga:pagePath==' + webpage_url)
         }]
