@@ -39,10 +39,16 @@ def get_service(api_name, api_version, scope, key_file_location,
 
   return service
 
-# get report of a query similar to that in Query Explorer
-def get_report(service):
-  # Use the Analytics Service Object to query the Analytics Reporting API v4
-  res = service.reports().batchGet(
+
+def get_user_page_views(service, username):
+  click_desktop = retrieve_pageview_report(service, '/user/' + username + '/')
+  click_mobile = retrieve_pageview_report(service, '/user/' + username + '/iOS')
+  return str(int(click_desktop) + int(click_mobile))
+
+# get report of a page view query similar to that in Query Explorer
+# Use the Analytics Service Object to query the Analytics Reporting API v4
+def retrieve_pageview_report(service, webpage_url):
+  response = service.reports().batchGet(
     body={
       'reportRequests' : [
         {
@@ -53,16 +59,18 @@ def get_report(service):
           'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
           'metrics': [{'expression': 'ga:totalEvents'}],
           'dimensions': [{'name': 'ga:pagePath'}],
-          'filtersExpression': 'ga:pagePath==/user/austin/'
+          'filtersExpression': ('ga:pagePath==' + webpage_url)
         }]
     }
   ).execute()
-  print "totalEvents-pagePath for /user/austin/: " + str(res)
-  return res
+  print "totalEvents-pagePath for " + webpage_url + ": " + str(response)
+  # Parse the Core Reporting response dictionary and return the result integer
+  return parse_pageview_response(response)
 
-def print_response(response):
-  """Parses and prints the Analytics Reporting API V4 response"""
 
+def parse_pageview_response(response):
+  # Parses and prints the Analytics Reporting API V4 response
+  # Here, we return the first value in the response, as only one value is expected
   for report in response.get('reports', []):
     columnHeader = report.get('columnHeader', {})
     dimensionHeaders = columnHeader.get('dimensions', [])
@@ -77,9 +85,14 @@ def print_response(response):
         print header + ': ' + dimension
 
       for i, values in enumerate(dateRangeValues):
-        print 'Date range (' + str(i) + ')'
+        print '--Date range (' + str(i) + ')'
         for metricHeader, value in zip(metricHeaders, values.get('values')):
-          print metricHeader.get('name') + ': ' + value
+          print '--' + metricHeader.get('name') + ': ' + value
+          return value
+
+  # zero is returned if response is empty
+  print '--Response is empty.'
+  return 0
   
 def get_first_profile_id(service):
   # Use the Analytics service object to get the first profile id.
@@ -146,8 +159,12 @@ def main():
   # Authenticate and construct service.
   service = get_service('analytics', 'v4', scope, key_file_location,
     service_account_email)
-  response = get_report(service)
-  print_response(response)
+  #response = get_report(service)
+
+  # How many page views does Navid get, including Aquaint-Web and Aquaint-iOS?
+  username = 'navid'
+  user_clicks = get_user_page_views(service, username)
+  print "User " + username + " has " + user_clicks + " Impressions."
   #profile = get_first_profile_id(service)
   #print_results(get_results(service, profile))
 
