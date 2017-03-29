@@ -108,7 +108,7 @@ def retrieve_pageview_report(service, webpage_url):
         }]
     }
   ).execute()
-  print "sessions-pagePath for " + webpage_url + ": " + str(response)
+  #print "sessions-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
   return parse_response_first_val(response)
 
@@ -134,7 +134,7 @@ def retrieve_pageview_locations_report(service, webpage_url, max_results):
         }]
     }
   ).execute()
-  print "sessions-pagePath (LOCATIONS) for " + webpage_url + ": " + str(response)
+  #print "sessions-pagePath (LOCATIONS) for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
   return parse_response_all_vals(response)
 
@@ -154,7 +154,7 @@ def retrieve_total_events_report(service, webpage_url):
         }]
     }
   ).execute()
-  print "totalEvents-pagePath for " + webpage_url + ": " + str(response)
+  #print "totalEvents-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
   return parse_response_first_val(response)
 
@@ -174,7 +174,7 @@ def retrieve_single_event_report(service, webpage_url, social_platform):
         }]
     }
   ).execute()
-  print "single-pagePath for " + webpage_url + " and " + social_platform + ": " + str(response)
+  #print "single-pagePath for " + webpage_url + " and " + social_platform + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
   return parse_response_first_val(response)
 
@@ -191,17 +191,17 @@ def parse_response_first_val(response):
       dimensions = row.get('dimensions', [])
       dateRangeValues = row.get('metrics', [])
 
-      for header, dimension in zip(dimensionHeaders, dimensions):
-        print header + ': ' + dimension
+      #for header, dimension in zip(dimensionHeaders, dimensions):
+        #print header + ': ' + dimension
 
       for i, values in enumerate(dateRangeValues):
-        print '--Date range (' + str(i) + ')'
+        #print '--Date range (' + str(i) + ')'
         for metricHeader, value in zip(metricHeaders, values.get('values')):
-          print '--' + metricHeader.get('name') + ': ' + value
+          #print '--' + metricHeader.get('name') + ': ' + value
           return value
 
   # zero is returned if response is empty
-  print '--Response is empty.'
+  #print '--Response is empty.'
   return 0
   
 # Return all values in a list of tuples format
@@ -222,13 +222,13 @@ def parse_response_all_vals(response):
 
       key=""
       for header, dimension in zip(dimensionHeaders, dimensions):
-        print header + ': ' + dimension
+        #print header + ': ' + dimension
         if header == 'ga:city' : key = dimension
 
       for i, values in enumerate(dateRangeValues):
-        print '--Date range (' + str(i) + ')'
+        #print '--Date range (' + str(i) + ')'
         for metricHeader, value in zip(metricHeaders, values.get('values')):
-          print '--' + metricHeader.get('name') + ': ' + value
+          #print '--' + metricHeader.get('name') + ': ' + value
           locations_dictionary[key] = int(value)
 
   return locations_dictionary 
@@ -269,8 +269,8 @@ def get_first_profile_id(service):
       if profiles.get('items'):
         # return the first view (profile) id.
         # DEBUG: show all we have for profiles
-        for entry in profiles.get('items'):
-          print str(entry)
+        #for entry in profiles.get('items'):
+          #print str(entry)
         return profiles.get('items')[0].get('id')
 
   return None
@@ -300,14 +300,14 @@ def main():
   # How many page views does Navid get, including Aquaint-Web and Aquaint-iOS?
   username = 'navid'
   user_clicks = get_user_page_views(username)
-  print "User " + username + " has " + str(user_clicks) + " Impressions."
+  #print "User " + username + " has " + str(user_clicks) + " Impressions."
 #
 #  eng_dict = get_user_total_engagements_breakdown(service, username, ['instagram', 'facebook', 'snapchat'])
 #  print "User engagement dictionary"
 #  print eng_dict
   dicto = get_user_page_views_locations(username, 10)
-  print "DICTIONARY:"
-  print dicto
+  #print "DICTIONARY:"
+  #print dicto
 
 if __name__ == '__main__':
   main()

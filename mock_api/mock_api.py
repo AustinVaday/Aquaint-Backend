@@ -247,8 +247,7 @@ def didISendFollowRequest(event, sql):
     
     return sql_select(sql, query)[0][0]
 
-# NOTE: sql parameter not needed. Added for consistency
-def createScanCodeForUser(event, sql): 
+def createScanCodeForUser(event): 
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
 
     # Set up AWS bucket
@@ -271,25 +270,25 @@ def createScanCodeForUser(event, sql):
     else:
         return -1
 
-def getUserPageViews(event, sql):
+def getUserPageViews(event):
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     return AquaintAnalytics.get_user_page_views(event["target"])
 
-def getUserTotalEngagements(event, sql):
+def getUserTotalEngagements(event):
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     return AquaintAnalytics.get_user_total_engagements(event["target"])
 
-def getUserSingleEngagements(event, sql):
+def getUserSingleEngagements(event):
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     if 'social_platform' not in event: raise RuntimeError("Please specify 'social_platform'.")
     return AquaintAnalytics.get_user_single_engagements(event["target"], event["social_platform"])
 
-def getUserTotalEngagementsBreakdown(event, sql):
+def getUserTotalEngagementsBreakdown(event):
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     if 'social_list' not in event: raise RuntimeError("Please specify 'social_list'.")
     return AquaintAnalytics.get_user_total_engagements_breakdown(event["target"], event["social_list"])
 
-def getUserPageViewsLocations(event, sql):
+def getUserPageViewsLocations(event):
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     if 'max_results' not in event: raise RuntimeError("Please specify 'max_results'.")
     return AquaintAnalytics.get_user_page_views_locations(event["target"], event["max_results"])
@@ -323,6 +322,16 @@ dispatch = {
     'getUserPageViewsLocations':        getUserPageViewsLocations
 }
 
+# List all functions that do not need to connect to mysql database
+dispatch_sql_not_needed = [
+    "createScanCodeForUser",
+    "getUserPageViews",
+    "getUserTotalEngagements",
+    "getUserSingleEngagements",
+    "getUserTotalEngagementsBreakdown",
+    "getUserPageViewsLocations"
+]
+
 
 def handler(event, context):
     if type(event) is not dict: raise RuntimeError("Parameters must be a hash.")
@@ -335,15 +344,16 @@ def handler(event, context):
     if action not in dispatch: raise RuntimeError("Invalid action: " + action)
     delegate = dispatch[action]
 
-    sql = pymysql.connect(
-        sqlconf.endpoint,
-        sqlconf.username,
-        "",
-        sqlconf.dbname
-    )
-
-    result = delegate(event, sql)
-    
-    sql.close()
+    if action not in dispatch_sql_not_needed:
+        sql = pymysql.connect(
+            sqlconf.endpoint,
+            sqlconf.username,
+            "",
+            sqlconf.dbname
+        )
+        result = delegate(event, sql)
+        sql.close()
+    else:
+        result = delegate(event)
 
     return result
