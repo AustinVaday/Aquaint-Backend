@@ -81,7 +81,7 @@ def get_user_total_engagements_breakdown(username, social_platform_list):
   for social_platform in social_platform_list:
     social_platform_engagements = get_user_single_engagements(username, social_platform)
     engagements_dict[social_platform] = social_platform_engagements
-  return engagements_dict 
+  return sorted_tuple_list(engagements_dict) 
 
 # Return list of tuplies of top N locations (currently just cities)
 def get_user_page_views_locations(username, max_results):
