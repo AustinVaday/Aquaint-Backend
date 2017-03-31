@@ -1,5 +1,6 @@
 import pymysql, sqlconf, boto3, requests 
 import AquaintAnalytics
+import stripe, stripeconf
 from io import BytesIO
 
 def sql_select(sql, query):
@@ -293,6 +294,70 @@ def getUserPageViewsLocations(event):
     if 'max_results' not in event: raise RuntimeError("Please specify 'max_results'.")
     return AquaintAnalytics.get_user_page_views_locations(event["target"], event["max_results"])
 
+# Doc ref : https://stripe.com/docs/mobile/ios/standard
+# This function should only be called ONCE. 
+def createPaymentCustomer(event, sql):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+    if 'email' not in event:raise RuntimeError("Please specify 'email'") 
+    stripe.api_key = stripeconf.api_key
+    response = stripe.Customer.create(
+        description = "Aquaint Aqualytics Customer",
+        email = event["email"]
+    )  
+
+    # NOTE: This will only update users that do not have customer IDs. Customer IDs should and must not be changed
+    # when emails are changed. 
+    query = "UPDATE users SET customerid = '{cust_id}' WHERE username = '{target}' AND customerid IS NULL;".format(
+        cust_id = response["id"],
+        target = event['target']
+    )    
+
+    sql_cd(sql, query)
+
+    # Return canonical customer id corresponding to that customer
+    query = "SELECT customerid FROM users WHERE username = '{target}'".format(
+        target = event['target']
+    )
+    return sql_select(sql, query)[0][0]
+
+# This method is called to populate the user's list of payment methods in our UI.
+def getPaymentCustomerObject(event):
+    if 'customerid' not in event: raise RuntimeError("Please specify 'customerid'.")
+    stripe.api_key = stripeconf.api_key
+    customer = stripe.customer.retrieve(event["customerid"])
+    return customer
+
+# This method is called when the user adds a new payment method via our UI
+def attachPaymentSourceToCustomerObject(event):
+    if 'customerid' not in event: raise RuntimeError("Please specify 'customerid'.")
+    if 'source' not in event: raise RuntimeError("Please specify 'source'.")
+    # source is the same as token id
+    stripe.api_key = stripeconf.api_key
+    customer = stripe.customer.retrieve(event["customerid"])
+    return customer.sources.create(source=event["source"])
+
+# This method is called when the user changes their selected payment method in our UI.
+def selectDefaultPaymentSource(event):
+    if 'customerid' not in event: raise RuntimeError("Please specify 'customerid'.")
+    if 'default_source' not in event: raise RuntimeError("Please specify 'default_source'.")
+    stripe.api_key = stripeconf.api_key
+    customer = stripe.customer.retrieve(event["customerid"])
+    customer.default_source = event["default_source"]
+    status = customer.save()
+    return status
+
+def createSubscription(event):
+    if 'source' not in event: raise RuntimeError("Please specify 'source'.")
+    if 'amount' not in event: raise RuntimeError("Please specify 'amount'.")
+    if 'currency' not in event: raise RuntimeError("Please specify 'currency'.")
+    stripe.api_key = stripeconf.api_key
+    status = stripe.Charge.create(
+        amount=event["amount"],
+        currency=event["currency"],
+        source=event["source"]
+    )
+    return status
+
 dispatch = {
     'adduser':                          adduser,
     'updatern':                         updatern,
@@ -319,7 +384,11 @@ dispatch = {
     'getUserTotalEngagements':          getUserTotalEngagements,
     'getUserSingleEngagements':         getUserSingleEngagements,
     'getUserTotalEngagementsBreakdown': getUserTotalEngagementsBreakdown,
-    'getUserPageViewsLocations':        getUserPageViewsLocations
+    'getUserPageViewsLocations':        getUserPageViewsLocations,
+    'createPaymentCustomer':            createPaymentCustomer,
+    'attachPaymentSourceToCustomerObject': attachPaymentSourceToCustomerObject,
+    'selectDefaultPaymentSource':       selectDefaultPaymentSource,
+    'createSubscription':               createSubscription
 }
 
 # List all functions that do not need to connect to mysql database
@@ -329,7 +398,11 @@ dispatch_sql_not_needed = [
     "getUserTotalEngagements",
     "getUserSingleEngagements",
     "getUserTotalEngagementsBreakdown",
-    "getUserPageViewsLocations"
+    "getUserPageViewsLocations",
+    "getPaymentCustomerObject",
+    "attachPaymentSourceToCustomerObject",
+    "selectDefaultPaymentSource",
+    "createSubscription"
 ]
 
 

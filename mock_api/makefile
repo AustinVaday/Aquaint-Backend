@@ -12,6 +12,6 @@ venv/bin/activate:
 	touch venv/bin/activate
 
 zip:
-	-zip -u ../bin/mock_api.zip Aquaint-Analytics-acba58fc01fc.json AquaintAnalytics.py mock_api.py sqlconf.py
+	-zip -u ../bin/mock_api.zip stripeconf.py Aquaint-Analytics-acba58fc01fc.json AquaintAnalytics.py mock_api.py sqlconf.py
 	-cd venv/lib/python2.7/site-packages/; zip -ru ../../../../../bin/mock_api.zip ./* 
 .PHONY: required-programs venv zip
