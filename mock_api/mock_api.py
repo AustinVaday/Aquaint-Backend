@@ -348,17 +348,22 @@ def selectDefaultPaymentSource(event, sql):
     status = customer.save()
     return status
 
-def createSubscription(event):
-    if 'source' not in event: raise RuntimeError("Please specify 'source'.")
-    if 'amount' not in event: raise RuntimeError("Please specify 'amount'.")
-    if 'currency' not in event: raise RuntimeError("Please specify 'currency'.")
+def createSubscription(event, sql):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+    #if 'source' not in event: raise RuntimeError("Please specify 'source'.")
+    #if 'amount' not in event: raise RuntimeError("Please specify 'amount'.")
+    #if 'currency' not in event: raise RuntimeError("Please specify 'currency'.")
+    if 'plan' not in event: raise RuntimeError("Please specify 'plan'.")
+    
+    cust_id = getCustomerIdFromUserName(event["target"], sql)
     stripe.api_key = stripeconf.api_key
-    status = stripe.Charge.create(
-        amount=event["amount"],
-        currency=event["currency"],
-        source=event["source"]
+    status = stripe.Subscription.create(
+        #amount=event["amount"],
+        #currency=event["currency"],
+        plan=event["plan"],
+        customer=cust_id
     )
-    return status
+    return str(status)
 
 dispatch = {
     'adduser':                          adduser,
@@ -401,8 +406,7 @@ dispatch_sql_not_needed = [
     "getUserTotalEngagements",
     "getUserSingleEngagements",
     "getUserTotalEngagementsBreakdown",
-    "getUserPageViewsLocations",
-    "createSubscription"
+    "getUserPageViewsLocations"
 ]
 
 
