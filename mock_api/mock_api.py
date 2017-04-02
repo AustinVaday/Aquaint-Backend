@@ -381,9 +381,10 @@ def cancelSubscription(event, sql):
 def countSubscriptionOfCustomer(event, sql):
     if 'target' not in event: raise RuntimeError("Please spcify 'target'.")
     cust_id = getCustomerIdFromUserName(event["target"], sql)
+    stripe.api_key = stripeconf.api_key
     customer = stripe.Customer.retrieve(cust_id)
     subscriptions = stripe.Subscription.list(customer=cust_id)
-    return subscriptions["data"].count
+    return len(subscriptions["data"])
 
 dispatch = {
     'adduser':                          adduser,
@@ -417,7 +418,8 @@ dispatch = {
     'attachPaymentSourceToCustomerObject': attachPaymentSourceToCustomerObject,
     'selectDefaultPaymentSource':       selectDefaultPaymentSource,
     'createSubscription':               createSubscription,
-    'cancelSubscription':               cancelSubscription
+    'cancelSubscription':               cancelSubscription,
+    'countSubscriptionOfCustomer':      countSubscriptionOfCustomer
 }
 
 # List all functions that do not need to connect to mysql database
