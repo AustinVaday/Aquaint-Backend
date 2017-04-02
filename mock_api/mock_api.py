@@ -365,6 +365,26 @@ def createSubscription(event, sql):
     )
     return str(status)
 
+def cancelSubscription(event, sql):
+    if 'target' not in event: raise RuntimeError("Please spcify 'target'.")
+    cust_id = getCustomerIdFromUserName(event["target"], sql)
+    stripe.api_key = stripeconf.api_key
+    customer = stripe.Customer.retrieve(cust_id)
+    subscriptions = stripe.Subscription.list(customer=cust_id)
+    # Getting the first subscribed plan of this user and cancel it
+    # Note that each customer should only have 0 or 1 subscribed plan
+    subscribeID = subscriptions["data"][0]["id"]
+    status = stripe.Subscription.retrieve(subscribeID).delete()
+
+    return str(status)
+
+def countSubscriptionOfCustomer(event, sql):
+    if 'target' not in event: raise RuntimeError("Please spcify 'target'.")
+    cust_id = getCustomerIdFromUserName(event["target"], sql)
+    customer = stripe.Customer.retrieve(cust_id)
+    subscriptions = stripe.Subscription.list(customer=cust_id)
+    return subscriptions["data"].count
+
 dispatch = {
     'adduser':                          adduser,
     'updatern':                         updatern,
@@ -396,7 +416,8 @@ dispatch = {
     'getPaymentCustomerObject':         getPaymentCustomerObject,
     'attachPaymentSourceToCustomerObject': attachPaymentSourceToCustomerObject,
     'selectDefaultPaymentSource':       selectDefaultPaymentSource,
-    'createSubscription':               createSubscription
+    'createSubscription':               createSubscription,
+    'cancelSubscription':               cancelSubscription
 }
 
 # List all functions that do not need to connect to mysql database
@@ -410,7 +431,7 @@ dispatch_sql_not_needed = [
 ]
 
 
-def  getCustomerIdFromUserName(userName, sql):
+def getCustomerIdFromUserName(userName, sql):
     query = "SELECT customerid FROM users WHERE username = '{target}'".format(
         target = userName 
     )
