@@ -1,6 +1,6 @@
 import pymysql, sqlconf, boto3, requests 
 import AquaintAnalytics
-import stripe, stripeconf
+import stripe, stripeconf, json
 from io import BytesIO
 
 def sql_select(sql, query):
@@ -259,7 +259,7 @@ def createScanCodeForUser(event):
     }
 
     # Generate this string using https://market.mashape.com/unitag/qr-code-generation
-    request_http = "https://unitag-qr-code-generation.p.mashape.com/api?data=%7B%22TYPE%22%3A%22url%22%2C%22DATA%22%3A%7B%22URL%22%3A%22www.aquaint.us/user/" + event["target"] + "%22%7D%7D&setting=%7B%22LAYOUT%22%3A%7B%22COLORBG%22%3A%22ffffff%22%2C%22GRADIENT_TYPE%22%3A%22NO_GR%22%2C%22COLOR1%22%3A%223f729b%22%7D%2C%22EYES%22%3A%7B%22EYE_TYPE%22%3A%22ER_IR%22%7D%2C%22LOGO%22%3A%7B%22L_NAME%22%3A%22http%3A%2F%2Faquaint.us%2Fimages%2FAquaint-Social-Emblem.png%22%2C%22EXCAVATE%22%3Atrue%7D%2C%22E%22%3A%22M%22%2C%22BODY_TYPE%22%3A5%7D"
+    request_http = "https://unitag-qr-code-generation.p.mashape.com/api?data=%7B%22TYPE%22%3A%22url%22%2C%22DATA%22%3A%7B%22URL%22%3A%22www.aquaint.us/user/" + event["target"] + "%22%7D%7D&setting=%7B%22LAYOUT%22%3A%7B%22COLORBG%22%3A%22ffffff%22%2C%22GRADIENT_TYPE%22%3A%22NO_GR%22%2C%22COLOR1%22%3A%223f729b%22%7D%2C%22EYES%22%3A%7B%22EYE_TYPE%22%3A%22ER_IR%22%7D%2C%22LOGO%22%3A%7B%22L_NAME%22%3A%22http%3A%2F%2Faquaint.us%2Fstatic%2Fimages%2FAquaint-Social-Emblem.png%22%2C%22EXCAVATE%22%3Atrue%7D%2C%22E%22%3A%22M%22%2C%22BODY_TYPE%22%3A5%7D"
 
     response = requests.get(request_http, headers=request_headers) 
 
@@ -313,35 +313,37 @@ def createPaymentCustomer(event, sql):
     )    
 
     sql_cd(sql, query)
-
-    # Return canonical customer id corresponding to that customer
-    query = "SELECT customerid FROM users WHERE username = '{target}'".format(
-        target = event['target']
-    )
-    return sql_select(sql, query)[0][0]
+    return getCustomerIdFromUserName(event["target"], sql)
 
 # This method is called to populate the user's list of payment methods in our UI.
-def getPaymentCustomerObject(event):
-    if 'customerid' not in event: raise RuntimeError("Please specify 'customerid'.")
+# Note, we need to cast customer to string due to weird JSON issue:
+#   https://github.com/stripe/stripe-python/issues/220
+def getPaymentCustomerObject(event, sql):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+    cust_id = getCustomerIdFromUserName(event["target"], sql)
+    print "cust id " + cust_id
     stripe.api_key = stripeconf.api_key
-    customer = stripe.customer.retrieve(event["customerid"])
-    return customer
+    print "api_key " + stripe.api_key 
+    customer = stripe.Customer.retrieve(cust_id)
+    return str(customer)
 
 # This method is called when the user adds a new payment method via our UI
-def attachPaymentSourceToCustomerObject(event):
-    if 'customerid' not in event: raise RuntimeError("Please specify 'customerid'.")
+def attachPaymentSourceToCustomerObject(event, sql):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     if 'source' not in event: raise RuntimeError("Please specify 'source'.")
     # source is the same as token id
+    cust_id = getCustomerIdFromUserName(event["target"], sql)
     stripe.api_key = stripeconf.api_key
-    customer = stripe.customer.retrieve(event["customerid"])
+    customer = stripe.Customer.retrieve(cust_id)
     return customer.sources.create(source=event["source"])
 
 # This method is called when the user changes their selected payment method in our UI.
-def selectDefaultPaymentSource(event):
-    if 'customerid' not in event: raise RuntimeError("Please specify 'customerid'.")
+def selectDefaultPaymentSource(event, sql):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     if 'default_source' not in event: raise RuntimeError("Please specify 'default_source'.")
+    cust_id = getCustomerIdFromUserName(event["target"], sql)
     stripe.api_key = stripeconf.api_key
-    customer = stripe.customer.retrieve(event["customerid"])
+    customer = stripe.Customer.retrieve(cust_id)
     customer.default_source = event["default_source"]
     status = customer.save()
     return status
@@ -386,6 +388,7 @@ dispatch = {
     'getUserTotalEngagementsBreakdown': getUserTotalEngagementsBreakdown,
     'getUserPageViewsLocations':        getUserPageViewsLocations,
     'createPaymentCustomer':            createPaymentCustomer,
+    'getPaymentCustomerObject':         getPaymentCustomerObject,
     'attachPaymentSourceToCustomerObject': attachPaymentSourceToCustomerObject,
     'selectDefaultPaymentSource':       selectDefaultPaymentSource,
     'createSubscription':               createSubscription
@@ -399,12 +402,15 @@ dispatch_sql_not_needed = [
     "getUserSingleEngagements",
     "getUserTotalEngagementsBreakdown",
     "getUserPageViewsLocations",
-    "getPaymentCustomerObject",
-    "attachPaymentSourceToCustomerObject",
-    "selectDefaultPaymentSource",
     "createSubscription"
 ]
 
+
+def  getCustomerIdFromUserName(userName, sql):
+    query = "SELECT customerid FROM users WHERE username = '{target}'".format(
+        target = userName 
+    )
+    return sql_select(sql, query)[0][0]
 
 def handler(event, context):
     if type(event) is not dict: raise RuntimeError("Parameters must be a hash.")
@@ -412,7 +418,7 @@ def handler(event, context):
     if 'action' not in event: raise RuntimeError("No action specified.")
     action = event['action']
     
-    if 'target' not in event: raise RuntimeError("No target specified.")
+    # if 'target' not in event: raise RuntimeError("No target specified.")
     
     if action not in dispatch: raise RuntimeError("Invalid action: " + action)
     delegate = dispatch[action]
