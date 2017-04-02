@@ -275,6 +275,11 @@ def getUserPageViews(event):
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     return AquaintAnalytics.get_user_page_views(event["target"])
 
+def getUserSinglePayViewsForDay(event):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+    if 'days_ago' not in event: raise RuntimeError("Please specify 'days_ago'.")
+    return AquaintAnalytics.get_user_single_page_views_for_day(event["target"], event["days_ago"])
+
 def getUserTotalEngagements(event):
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     return AquaintAnalytics.get_user_total_engagements(event["target"])
@@ -409,6 +414,7 @@ dispatch = {
     'didISendFollowRequest':            didISendFollowRequest,
     'createScanCodeForUser':            createScanCodeForUser,
     'getUserPageViews':                 getUserPageViews,
+    'getUserSinglePayViewsForDay':      getUserSinglePayViewsForDay,
     'getUserTotalEngagements':          getUserTotalEngagements,
     'getUserSingleEngagements':         getUserSingleEngagements,
     'getUserTotalEngagementsBreakdown': getUserTotalEngagementsBreakdown,
@@ -426,6 +432,7 @@ dispatch = {
 dispatch_sql_not_needed = [
     "createScanCodeForUser",
     "getUserPageViews",
+    "getUserSinglePayViewsForDay",
     "getUserTotalEngagements",
     "getUserSingleEngagements",
     "getUserTotalEngagementsBreakdown",

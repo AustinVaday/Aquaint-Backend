@@ -60,6 +60,12 @@ def get_user_page_views(username):
   view_mobile = retrieve_pageview_report(service, '/user/' + username + '/iOS')
   return int(view_desktop) + int(view_mobile)
 
+def get_user_single_page_views_for_day(username, days_ago):
+  service = setup_and_get_service()
+  view_desktop = retrieve_single_pageview_report(service, '/user/' + username + '/', days_ago)
+  view_mobile = retrieve_single_pageview_report(service, '/user/' + username + '/iOS', days_ago)
+  return int(view_desktop) + int(view_mobile)
+
 # Return single number to reflect number of total engagements for all platforms combined
 def get_user_total_engagements(username):
   service = setup_and_get_service()
@@ -102,13 +108,36 @@ def retrieve_pageview_report(service, webpage_url):
           # https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet
           'viewId': VIEW_ID,
           'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
-          'metrics': [{'expression': 'ga:sessions'}],
+          'metrics': [{'expression': 'ga:uniquePageViews'}],
           'dimensions': [{'name': 'ga:pagePath'}],
           'filtersExpression': ('ga:pagePath==' + webpage_url)
         }]
     }
   ).execute()
-  #print "sessions-pagePath for " + webpage_url + ": " + str(response)
+  #print "uniquePageViews-pagePath for " + webpage_url + ": " + str(response)
+  # Parse the Core Reporting response dictionary and return the result integer
+  return parse_response_first_val(response)
+
+def retrieve_single_pageview_report(service, webpage_url, days_ago):
+
+  startString = str(days_ago) + "daysAgo"
+  endString = str(days_ago - 1) + "daysAgo"
+  response = service.reports().batchGet(
+    body={
+      'reportRequests' : [
+        {
+          # On the format of fields ulocations_dictionary[key] = sed in Query Explorer, see:
+          # https://developers.google.com/analytics/devguides/reporting/core/v4/samples
+          # https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet
+          'viewId': VIEW_ID,
+          'dateRanges': [{'startDate' : startString, 'endDate' : endString}],
+          'metrics': [{'expression': 'ga:uniquePageViews'}],
+          'dimensions': [{'name': 'ga:pagePath'}],
+          'filtersExpression': ('ga:pagePath==' + webpage_url)
+        }]
+    }
+  ).execute()
+  #print "uniquePageViews-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
   return parse_response_first_val(response)
 
@@ -126,15 +155,15 @@ def retrieve_pageview_locations_report(service, webpage_url, max_results):
           # merge.
           'viewId': VIEW_ID,
           'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
-          'metrics': [{'expression': 'ga:sessions'}],
+          'metrics': [{'expression': 'ga:uniquePageViews'}],
           'dimensions': [{'name': 'ga:pagePath'}, {'name': 'ga:city'}],
-          #'orderBys': [{'fieldName': 'ga:sessions', 'sortOrder': 'DESCENDING'}],
+          #'orderBys': [{'fieldName': 'ga:uniquePageViews', 'sortOrder': 'DESCENDING'}],
           'filtersExpression': ('ga:pagePath==' + webpage_url),
           'pageSize': max_results
         }]
     }
   ).execute()
-  #print "sessions-pagePath (LOCATIONS) for " + webpage_url + ": " + str(response)
+  #print "uniquePageViews-pagePath (LOCATIONS) for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
   return parse_response_all_vals(response)
 
@@ -274,27 +303,6 @@ def get_first_profile_id(service):
         return profiles.get('items')[0].get('id')
 
   return None
-
-
-def get_results(service, profile_id):
-  # Use the Analytics Service Object to query the Core Reporting API
-  # for the number of sessions within the past seven days.
-  return service.data().ga().get(
-      ids='ga:' + profile_id,
-      start_date='14daysAgo',
-      end_date='today',
-      metrics='ga:sessions').execute()
-
-
-def print_results(results):
-  # Print data nicely for the user.
-  if results:
-    print 'View (Profile): %s' % results.get('profileInfo').get('profileName')
-    print 'Total Sessions: %s' % results.get('rows')[0][0]
-
-  else:
-    print 'No results found'
-
 
 def main():
   # How many page views does Navid get, including Aquaint-Web and Aquaint-iOS?
