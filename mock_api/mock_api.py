@@ -374,7 +374,7 @@ def cancelSubscription(event, sql):
     # Getting the first subscribed plan of this user and cancel it
     # Note that each customer should only have 0 or 1 subscribed plan
     subscribeID = subscriptions["data"][0]["id"]
-    status = stripe.Subscription.retrieve(subscribeID).delete()
+    status = stripe.Subscription.retrieve(subscribeID).delete(at_period_end=True)
 
     return str(status)
 
