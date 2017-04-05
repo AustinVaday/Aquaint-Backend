@@ -2,6 +2,8 @@ import pymysql, sqlconf, boto3, requests
 import AquaintAnalytics
 import stripe, stripeconf, json
 from io import BytesIO
+import itunesiap, itunesiapconf #In-app payments
+
 
 def sql_select(sql, query):
     cursor = sql.cursor()
@@ -299,97 +301,119 @@ def getUserPageViewsLocations(event):
     if 'max_results' not in event: raise RuntimeError("Please specify 'max_results'.")
     return AquaintAnalytics.get_user_page_views_locations(event["target"], event["max_results"])
 
-# Doc ref : https://stripe.com/docs/mobile/ios/standard
-# This function should only be called ONCE. 
-def createPaymentCustomer(event, sql):
-    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
-    if 'email' not in event:raise RuntimeError("Please specify 'email'") 
-    stripe.api_key = stripeconf.api_key
-    response = stripe.Customer.create(
-        description = "Aquaint Aqualytics Customer",
-        email = event["email"]
-    )  
+# # Doc ref : https://stripe.com/docs/mobile/ios/standard
+# # This function should only be called ONCE. 
+# def createPaymentCustomer(event, sql):
+#     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+#     if 'email' not in event:raise RuntimeError("Please specify 'email'") 
+#     stripe.api_key = stripeconf.api_key
+#     response = stripe.Customer.create(
+#         description = "Aquaint Aqualytics Customer",
+#         email = event["email"]
+#     )  
 
-    # NOTE: This will only update users that do not have customer IDs. Customer IDs should and must not be changed
-    # when emails are changed. 
-    query = "UPDATE users SET customerid = '{cust_id}' WHERE username = '{target}' AND customerid IS NULL;".format(
-        cust_id = response["id"],
-        target = event['target']
-    )    
+#     # NOTE: This will only update users that do not have customer IDs. Customer IDs should and must not be changed
+#     # when emails are changed. 
+#     query = "UPDATE users SET customerid = '{cust_id}' WHERE username = '{target}' AND customerid IS NULL;".format(
+#         cust_id = response["id"],
+#         target = event['target']
+#     )    
 
-    sql_cd(sql, query)
-    return getCustomerIdFromUserName(event["target"], sql)
+#     sql_cd(sql, query)
+#     return getCustomerIdFromUserName(event["target"], sql)
 
-# This method is called to populate the user's list of payment methods in our UI.
-# Note, we need to cast customer to string due to weird JSON issue:
-#   https://github.com/stripe/stripe-python/issues/220
-def getPaymentCustomerObject(event, sql):
-    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
-    cust_id = getCustomerIdFromUserName(event["target"], sql)
-    print "cust id " + cust_id
-    stripe.api_key = stripeconf.api_key
-    print "api_key " + stripe.api_key 
-    customer = stripe.Customer.retrieve(cust_id)
-    return str(customer)
+# # This method is called to populate the user's list of payment methods in our UI.
+# # Note, we need to cast customer to string due to weird JSON issue:
+# #   https://github.com/stripe/stripe-python/issues/220
+# def getPaymentCustomerObject(event, sql):
+#     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+#     cust_id = getCustomerIdFromUserName(event["target"], sql)
+#     print "cust id " + cust_id
+#     stripe.api_key = stripeconf.api_key
+#     print "api_key " + stripe.api_key 
+#     customer = stripe.Customer.retrieve(cust_id)
+#     return str(customer)
 
-# This method is called when the user adds a new payment method via our UI
-def attachPaymentSourceToCustomerObject(event, sql):
-    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
-    if 'source' not in event: raise RuntimeError("Please specify 'source'.")
-    # source is the same as token id
-    cust_id = getCustomerIdFromUserName(event["target"], sql)
-    stripe.api_key = stripeconf.api_key
-    customer = stripe.Customer.retrieve(cust_id)
-    return customer.sources.create(source=event["source"])
+# # This method is called when the user adds a new payment method via our UI
+# def attachPaymentSourceToCustomerObject(event, sql):
+#     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+#     if 'source' not in event: raise RuntimeError("Please specify 'source'.")
+#     # source is the same as token id
+#     cust_id = getCustomerIdFromUserName(event["target"], sql)
+#     stripe.api_key = stripeconf.api_key
+#     customer = stripe.Customer.retrieve(cust_id)
+#     return customer.sources.create(source=event["source"])
 
-# This method is called when the user changes their selected payment method in our UI.
-def selectDefaultPaymentSource(event, sql):
-    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
-    if 'default_source' not in event: raise RuntimeError("Please specify 'default_source'.")
-    cust_id = getCustomerIdFromUserName(event["target"], sql)
-    stripe.api_key = stripeconf.api_key
-    customer = stripe.Customer.retrieve(cust_id)
-    customer.default_source = event["default_source"]
-    status = customer.save()
-    return status
+# # This method is called when the user changes their selected payment method in our UI.
+# def selectDefaultPaymentSource(event, sql):
+#     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+#     if 'default_source' not in event: raise RuntimeError("Please specify 'default_source'.")
+#     cust_id = getCustomerIdFromUserName(event["target"], sql)
+#     stripe.api_key = stripeconf.api_key
+#     customer = stripe.Customer.retrieve(cust_id)
+#     customer.default_source = event["default_source"]
+#     status = customer.save()
+#     return status
 
-def createSubscription(event, sql):
-    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
-    #if 'source' not in event: raise RuntimeError("Please specify 'source'.")
-    #if 'amount' not in event: raise RuntimeError("Please specify 'amount'.")
-    #if 'currency' not in event: raise RuntimeError("Please specify 'currency'.")
-    if 'plan' not in event: raise RuntimeError("Please specify 'plan'.")
+# def createSubscription(event, sql):
+#     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+#     #if 'source' not in event: raise RuntimeError("Please specify 'source'.")
+#     #if 'amount' not in event: raise RuntimeError("Please specify 'amount'.")
+#     #if 'currency' not in event: raise RuntimeError("Please specify 'currency'.")
+#     if 'plan' not in event: raise RuntimeError("Please specify 'plan'.")
     
-    cust_id = getCustomerIdFromUserName(event["target"], sql)
-    stripe.api_key = stripeconf.api_key
-    status = stripe.Subscription.create(
-        #amount=event["amount"],
-        #currency=event["currency"],
-        plan=event["plan"],
-        customer=cust_id
-    )
-    return str(status)
+#     cust_id = getCustomerIdFromUserName(event["target"], sql)
+#     stripe.api_key = stripeconf.api_key
+#     status = stripe.Subscription.create(
+#         #amount=event["amount"],
+#         #currency=event["currency"],
+#         plan=event["plan"],
+#         customer=cust_id
+#     )
+#     return str(status)
 
-def cancelSubscription(event, sql):
-    if 'target' not in event: raise RuntimeError("Please spcify 'target'.")
-    cust_id = getCustomerIdFromUserName(event["target"], sql)
-    stripe.api_key = stripeconf.api_key
-    customer = stripe.Customer.retrieve(cust_id)
-    subscriptions = stripe.Subscription.list(customer=cust_id)
-    # Getting the first subscribed plan of this user and cancel it
-    # Note that each customer should only have 0 or 1 subscribed plan
-    subscribeID = subscriptions["data"][0]["id"]
-    status = stripe.Subscription.retrieve(subscribeID).delete(at_period_end=True)
+# def cancelSubscription(event, sql):
+#     if 'target' not in event: raise RuntimeError("Please spcify 'target'.")
+#     cust_id = getCustomerIdFromUserName(event["target"], sql)
+#     stripe.api_key = stripeconf.api_key
+#     customer = stripe.Customer.retrieve(cust_id)
+#     subscriptions = stripe.Subscription.list(customer=cust_id)
+#     # Getting the first subscribed plan of this user and cancel it
+#     # Note that each customer should only have 0 or 1 subscribed plan
+#     subscribeID = subscriptions["data"][0]["id"]
+#     status = stripe.Subscription.retrieve(subscribeID).delete(at_period_end=True)
 
-    return str(status)
+#     return str(status)
 
-def countSubscriptionOfCustomer(event, sql):
-    if 'target' not in event: raise RuntimeError("Please spcify 'target'.")
-    cust_id = getCustomerIdFromUserName(event["target"], sql)
-    stripe.api_key = stripeconf.api_key
-    customer = stripe.Customer.retrieve(cust_id)
-    subscriptions = stripe.Subscription.list(customer=cust_id)
-    return len(subscriptions["data"])
+# def countSubscriptionOfCustomer(event, sql):
+#     if 'target' not in event: raise RuntimeError("Please spcify 'target'.")
+#     cust_id = getCustomerIdFromUserName(event["target"], sql)
+#     stripe.api_key = stripeconf.api_key
+#     customer = stripe.Customer.retrieve(cust_id)
+#     subscriptions = stripe.Subscription.list(customer=cust_id)
+#     return len(subscriptions["data"])
+
+
+def verifyAppleReceipt(event):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+    if 'receipt_json' not in event: raise RuntimeError("Please specify 'receipt_json'.")
+
+    try:
+        with itunesiap.env.current().clone(use_sandbox=True):
+            response = itunesiap.verify(event["receipt_json"], itunesiapconf.api_key)
+            return response
+    except Exception as e:
+        print('invalid receipt provided')
+        return str(e)
+
+def subscriptionGetExpiresDate(event):
+    response = verifyAppleReceipt(event)
+
+    try:
+        return response.receipt.last_in_app.expires_date_ms
+    except Exception as e:
+        return str(e)
+        #return 0
 
 dispatch = {
     'adduser':                          adduser,
@@ -419,13 +443,15 @@ dispatch = {
     'getUserSingleEngagements':         getUserSingleEngagements,
     'getUserTotalEngagementsBreakdown': getUserTotalEngagementsBreakdown,
     'getUserPageViewsLocations':        getUserPageViewsLocations,
-    'createPaymentCustomer':            createPaymentCustomer,
-    'getPaymentCustomerObject':         getPaymentCustomerObject,
-    'attachPaymentSourceToCustomerObject': attachPaymentSourceToCustomerObject,
-    'selectDefaultPaymentSource':       selectDefaultPaymentSource,
-    'createSubscription':               createSubscription,
-    'cancelSubscription':               cancelSubscription,
-    'countSubscriptionOfCustomer':      countSubscriptionOfCustomer
+    # 'createPaymentCustomer':            createPaymentCustomer,
+    # 'getPaymentCustomerObject':         getPaymentCustomerObject,
+    # 'attachPaymentSourceToCustomerObject': attachPaymentSourceToCustomerObject,
+    # 'selectDefaultPaymentSource':       selectDefaultPaymentSource,
+    # 'createSubscription':               createSubscription,
+    # 'cancelSubscription':               cancelSubscription,
+    # 'countSubscriptionOfCustomer':      countSubscriptionOfCustomer
+    'verifyAppleReceipt':               verifyAppleReceipt,
+    'subscriptionGetExpiresDate':       subscriptionGetExpiresDate
 }
 
 # List all functions that do not need to connect to mysql database
@@ -436,7 +462,9 @@ dispatch_sql_not_needed = [
     "getUserTotalEngagements",
     "getUserSingleEngagements",
     "getUserTotalEngagementsBreakdown",
-    "getUserPageViewsLocations"
+    "getUserPageViewsLocations",
+    "verifyAppleReceipt",
+    "subscriptionGetExpiresDate"
 ]
 
 
