@@ -1,8 +1,11 @@
+.PHONY: required-programs venv zip
 
-all: required-programs venv zip
+default:	archive 
+
+archive: 	required-programs venv zip
 
 required-programs:
-	which zip virtualenv pip
+	which zip virtualenv pip aws
 
 venv: venv/bin/activate
 
@@ -14,4 +17,7 @@ venv/bin/activate:
 zip:
 	-zip -u ../bin/mock_api.zip stripeconf.py Aquaint-Analytics-acba58fc01fc.json AquaintAnalytics.py mock_api.py sqlconf.py
 	-cd venv/lib/python2.7/site-packages/; zip -ru ../../../../../bin/mock_api.zip ./* 
-.PHONY: required-programs venv zip
+
+upload:	archive
+	aws lambda update-function-code --function-name mock_api --zip-file fileb://../bin/mock_api.zip
+
