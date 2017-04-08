@@ -1,6 +1,7 @@
 import sys, time
 from apns import APNs, Frame, Payload
 
+# Note that it works fine to use sandbox mode with distribution keys
 apns = APNs(use_sandbox=True,
             cert_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_cert.pem',
             key_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_key_noenc.pem')
@@ -27,4 +28,3 @@ for token_hex in sending_devices:
     apns.gateway_server.send_notification(token_hex, payload3)
 
     print "Sent test notification to: " + token_hex
-    
