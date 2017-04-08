@@ -1,4 +1,4 @@
-import sys, time
+import time
 from apns import APNs, Frame, Payload
 
 apns = APNs(use_sandbox=True,
@@ -9,11 +9,9 @@ apns = APNs(use_sandbox=True,
 #payload = Payload(alert="PyAPNs notification testing in Python.", sound="default", badge=1)
 
 #sending_devices = ['d5fd0dd88970332f6898accb0d7d4a8e97878be3b3e469bedc5911d4647af4aa']
-sending_devices = sys.argv[1:]
+sending_devices
 
 for token_hex in sending_devices:
-    print "Sending notification to device: " + token_hex
-
     pn_text1 = "PyAPNs Notification Test: newFollower"
     payload1 = Payload(alert=pn_text1, sound="default", badge=1, custom={'identifier':"newFollower"})
     apns.gateway_server.send_notification(token_hex, payload1)
