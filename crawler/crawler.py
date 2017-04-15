@@ -18,7 +18,7 @@ import socket, errno
 
 # Initializing Apple Push Notification: connect from provider to APN. A key file without passphase is used here for unattended script execution.
 #apns = APNs(use_sandbox=True, cert_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_cert.pem', key_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_key_noenc.pem')
-apns = APNs(use_sandbox=False,
+apns = APNs(use_sandbox=True,
             cert_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_cert.pem',
             key_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_key_noenc.pem')
 
@@ -26,7 +26,7 @@ DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
 DEST_TABLE   = 'aquaint-newsfeed'
 DEVICE_TABLE = 'aquaint-devices'
-NOTIFICATION_PERIOD_SEC = 600 #10 minutes for testing
+NOTIFICATION_PERIOD_SEC = 600 # 10 minutes for testing
 NOTIFICATION_TIMESTAMP_FILE = "notificationsLastSentTimestamp.txt"
 
 TIMELINE_LENGTH = 60
@@ -262,8 +262,9 @@ def crawl():
     # Get last notification sent time, via local file on server 
     last_read_timestamp = get_notifications_last_sent_timestamp()
     current_timestamp = get_current_timestamp()
-    #send_push_notifications = (current_timestamp - last_read_timestamp) > NOTIFICATION_PERIOD_SEC
-    send_push_notifications = True
+    send_push_notifications = (current_timestamp - last_read_timestamp) > NOTIFICATION_PERIOD_SEC
+    # A testing flag to enforce sending push notification
+    #send_push_notifications = True
     print "It's time to send push notifications? " + str(send_push_notifications)
 
     # Iterate over all users
