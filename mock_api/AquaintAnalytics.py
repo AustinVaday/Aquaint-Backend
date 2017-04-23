@@ -108,7 +108,7 @@ def retrieve_pageview_report(service, webpage_url):
           # https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet
           'viewId': VIEW_ID,
           'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
-          'metrics': [{'expression': 'ga:uniquePageViews'}],
+          'metrics': [{'expression': 'ga:sessions'}],
           'dimensions': [{'name': 'ga:pagePath'}],
           'filtersExpression': ('ga:pagePath==' + webpage_url)
         }]
@@ -116,6 +116,7 @@ def retrieve_pageview_report(service, webpage_url):
   ).execute()
   #print "uniquePageViews-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
+  print "retrieve_pageview_report: " + webpage_url + ": " + parse_response_first_val(response);
   return parse_response_first_val(response)
 
 def retrieve_single_pageview_report(service, webpage_url, days_ago):
