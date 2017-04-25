@@ -123,7 +123,7 @@ def retrieve_pageview_report(service, webpage_url):
   ).execute()
   #print "uniquePageViews-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
-  print "retrieve_pageview_report: " + webpage_url + ": " + parse_response_first_val(response);
+  print "retrieve_pageview_report: " + webpage_url + ": " + str(parse_response_first_val(response));
   return parse_response_first_val(response)
 
 def retrieve_single_pageview_report(service, webpage_url, days_ago):
