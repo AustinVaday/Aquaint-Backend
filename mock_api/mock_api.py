@@ -442,6 +442,7 @@ dispatch = {
     'didISendFollowRequest':            didISendFollowRequest,
     'createScanCodeForUser':            createScanCodeForUser,
     'getUserPageViews':                 getUserPageViews,
+    'getUserCodeScans':                 getUserCodeScans,
     'getUserSinglePayViewsForDay':      getUserSinglePayViewsForDay,
     'getUserTotalEngagements':          getUserTotalEngagements,
     'getUserSingleEngagements':         getUserSingleEngagements,
@@ -462,6 +463,7 @@ dispatch = {
 dispatch_sql_not_needed = [
     "createScanCodeForUser",
     "getUserPageViews",
+    "getUserCodeScans",
     "getUserSinglePayViewsForDay",
     "getUserTotalEngagements",
     "getUserSingleEngagements",
