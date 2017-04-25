@@ -60,6 +60,13 @@ def get_user_page_views(username):
   view_mobile = retrieve_pageview_report(service, '/user/' + username + '/iOS')
   return int(view_desktop) + int(view_mobile)
 
+# Return the number of code scans a user has got
+def get_user_code_scans(username):
+  service = setup_and_get_service()
+  view_desktop = retrieve_pageview_report(service, '/user/' + username + '/')
+  app_scan = retrieve_pageview_report(service, '/user/' + username + '/iOS/scan')
+  return int(view_desktop) + int(app_scan)
+
 def get_user_single_page_views_for_day(username, days_ago):
   service = setup_and_get_service()
   view_desktop = retrieve_single_pageview_report(service, '/user/' + username + '/', days_ago)

@@ -277,6 +277,10 @@ def getUserPageViews(event):
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     return AquaintAnalytics.get_user_page_views(event["target"])
 
+def getUserCodeScans(event):
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+    return AquaintAnalytics.get_user_code_scans(event["target"])
+    
 def getUserSinglePayViewsForDay(event):
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     if 'days_ago' not in event: raise RuntimeError("Please specify 'days_ago'.")
