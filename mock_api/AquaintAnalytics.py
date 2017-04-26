@@ -56,9 +56,18 @@ def setup_and_get_service():
 # Return single number to reflect total number of page views for a user
 def get_user_page_views(username):
   service = setup_and_get_service()
-  view_desktop = retrieve_pageview_report(service, '/user/' + username + '/')
+  #view_desktop = retrieve_pageview_report(service, '/user/' + username + '/')
+  view_desktop = retrieve_web_pageview_report(service, username)
   view_mobile = retrieve_pageview_report(service, '/user/' + username + '/iOS')
   return int(view_desktop) + int(view_mobile)
+
+# Return the number of code scans a user has got
+def get_user_code_scans(username):
+  service = setup_and_get_service()
+  #view_desktop = retrieve_pageview_report(service, '/user/' + username + '/')
+  view_desktop = retrieve_web_pageview_report(service, username)
+  app_scan = retrieve_pageview_report(service, '/user/' + username + '/iOS/scan')
+  return int(view_desktop) + int(app_scan)
 
 def get_user_single_page_views_for_day(username, days_ago):
   service = setup_and_get_service()
@@ -98,6 +107,7 @@ def get_user_page_views_locations(username, max_results):
 
 # get report of a page view query similar to that in Query Explorer
 # Use the Analytics Service Object to query the Analytics Reporting API v4
+
 def retrieve_pageview_report(service, webpage_url):
   response = service.reports().batchGet(
     body={
@@ -116,8 +126,27 @@ def retrieve_pageview_report(service, webpage_url):
   ).execute()
   #print "uniquePageViews-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
-  print "retrieve_pageview_report: " + webpage_url + ": " + parse_response_first_val(response);
+  print "retrieve_pageview_report: " + webpage_url + ": " + str(parse_response_first_val(response));
   return parse_response_first_val(response)
+
+def retrieve_web_pageview_report(service, username):
+  webpage_url1 = '/user/' + username
+  webpage_url2 = '/user/' + username + '/'
+  response = service.reports().batchGet(
+    body={
+      'reportRequests' : [
+        {
+          'viewId': VIEW_ID,
+          'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
+          'metrics': [{'expression': 'ga:sessions'}],
+          'dimensions': [{'name': 'ga:pagePath'}],
+          'filtersExpression': ('ga:pagePath==' + webpage_url1 + ',ga:pagePath==' + webpage_url2)
+        }]
+    }
+  ).execute()
+  
+  #print str(response)
+  return parse_response_all_vals_sum(response)
 
 def retrieve_single_pageview_report(service, webpage_url, days_ago):
 
@@ -208,6 +237,7 @@ def retrieve_single_event_report(service, webpage_url, social_platform):
   # Parse the Core Reporting response dictionary and return the result integer
   return parse_response_first_val(response)
 
+
 def parse_response_first_val(response):
   # Parses and prints the Analytics Reporting API V4 response
   # Here, we return the first value in the response, as only one value is expected
@@ -220,20 +250,43 @@ def parse_response_first_val(response):
     for row in rows:
       dimensions = row.get('dimensions', [])
       dateRangeValues = row.get('metrics', [])
-
       #for header, dimension in zip(dimensionHeaders, dimensions):
         #print header + ': ' + dimension
-
       for i, values in enumerate(dateRangeValues):
         #print '--Date range (' + str(i) + ')'
         for metricHeader, value in zip(metricHeaders, values.get('values')):
           #print '--' + metricHeader.get('name') + ': ' + value
-          return value
+          return str(value)
 
   # zero is returned if response is empty
   #print '--Response is empty.'
-  return 0
-  
+  return str(0)
+
+def parse_response_all_vals_sum(response):
+  # Parses and prints the Analytics Reporting API V4 response
+  # Here, we return the sum of all values in the response
+  for report in response.get('reports', []):
+    columnHeader = report.get('columnHeader', {})
+    dimensionHeaders = columnHeader.get('dimensions', [])
+    metricHeaders = columnHeader.get('metricHeader', {}).get('metricHeaderEntries', [])
+    rows = report.get('data', {}).get('rows', [])
+
+    valueSum = 0
+    for row in rows:
+      dimensions = row.get('dimensions', [])
+      dateRangeValues = row.get('metrics', [])
+      for header, dimension in zip(dimensionHeaders, dimensions):
+        #print header + ': ' + dimension
+        for i, values in enumerate(dateRangeValues):
+          #print '--Date range (' + str(i) + ')'
+          for metricHeader, value in zip(metricHeaders, values.get('values')):
+            print '--parse_response_all_vals_sum: ' + metricHeader.get('name') + ': ' + value
+            valueSum += int(value)
+
+  # zero is returned if response is empty
+  #print '--Response is empty.'
+  return str(valueSum)
+
 # Return all values in a list of tuples format
 def parse_response_all_vals(response):
   # Parses and prints the Analytics Reporting API V4 response
@@ -305,18 +358,25 @@ def get_first_profile_id(service):
 
   return None
 
+
 def main():
   # How many page views does Navid get, including Aquaint-Web and Aquaint-iOS?
-  username = 'navid'
-  user_clicks = get_user_page_views(username)
-  #print "User " + username + " has " + str(user_clicks) + " Impressions."
-#
+  username1 = 'navid'
+  user_clicks = get_user_page_views(username1)
+  print "User " + username1 + " has " + str(user_clicks) + " Page Views."
+
 #  eng_dict = get_user_total_engagements_breakdown(service, username, ['instagram', 'facebook', 'snapchat'])
 #  print "User engagement dictionary"
 #  print eng_dict
-  dicto = get_user_page_views_locations(username, 10)
+  dicto = get_user_page_views_locations(username1, 10)
   #print "DICTIONARY:"
   #print dicto
+
+  # Testing #2
+  username2 = 'austin'
+  user_web_pageviews = get_user_page_views(username2)
+  user_code_scans = get_user_code_scans(username2)
+  print "Testing result: get_user_page_views = " + str(user_web_pageviews) + ", get_user_code_scans = " + str(user_code_scans)
 
 if __name__ == '__main__':
   main()
