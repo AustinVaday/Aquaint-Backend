@@ -52,7 +52,8 @@ def setup_and_get_service():
   # Authenticate and construct service.
   return get_service('analytics', 'v4', scope, key_file_location,
     service_account_email)
-    
+
+
 # Return single number to reflect total number of page views for a user
 def get_user_page_views(username):
   service = setup_and_get_service()
@@ -71,23 +72,28 @@ def get_user_code_scans(username):
 
 def get_user_single_page_views_for_day(username, days_ago):
   service = setup_and_get_service()
-  view_desktop = retrieve_single_pageview_report(service, '/user/' + username + '/', days_ago)
-  view_mobile = retrieve_single_pageview_report(service, '/user/' + username + '/iOS', days_ago)
-  return int(view_desktop) + int(view_mobile)
+  #view_desktop = retrieve_single_pageview_report(service, username, days_ago)
+  #view_mobile = retrieve_single_pageview_report(service, '/user/' + username + '/iOS', days_ago)
+  #return int(view_desktop) + int(view_mobile)
+  views_total = retrieve_single_pageview_report(service, username, days_ago)
 
 # Return single number to reflect number of total engagements for all platforms combined
 def get_user_total_engagements(username):
   service = setup_and_get_service()
-  click_desktop = retrieve_total_events_report(service, '/user/' + username + '/')
-  click_mobile = retrieve_total_events_report(service, '/user/' + username + '/iOS')
-  return int(click_desktop) + int(click_mobile)
+  #click_desktop = retrieve_total_events_report(service, username)
+  #click_mobile = retrieve_total_events_report(service, '/user/' + username + '/iOS')
+  #return int(click_desktop) + int(click_mobile)
+  clicks_total = retrieve_total_events_report(service, username)
+  return clicks_total
 
 # Return single number to reflect number of engagments for just 1 social platform
 def get_user_single_engagements(username, social_platform):
   service = setup_and_get_service()
-  click_desktop_single = retrieve_single_event_report(service, '/user/' + username + '/', social_platform)
-  click_mobile_single = retrieve_single_event_report(service, '/user/' + username + '/iOS', social_platform)
-  return int(click_desktop_single) + int(click_mobile_single)
+  #click_desktop_single = retrieve_single_event_report(service, username, social_platform)
+  #click_mobile_single = retrieve_single_event_report(service, '/user/' + username + '/iOS', social_platform)
+  #return int(click_desktop_single) + int(click_mobile_single)
+  clicks_total_single = retrieve_single_event_report(service, username, social_platform)
+  return clicks_total_single
 
 # Return dictionary of social platform -> engagement count for all given social platforms
 def get_user_total_engagements_breakdown(username, social_platform_list):
@@ -101,7 +107,7 @@ def get_user_total_engagements_breakdown(username, social_platform_list):
 # Return list of tuplies of top N locations (currently just cities)
 def get_user_page_views_locations(username, max_results):
   service = setup_and_get_service()
-  location_dict_web = retrieve_pageview_locations_report(service, '/user/' + username + '/', max_results)
+  location_dict_web = retrieve_pageview_locations_report(service, username, max_results)
   location_dict_mobile = retrieve_pageview_locations_report(service, '/user/' + username + '/iOS', max_results)
   return sorted_tuple_list_desc(union_dict(location_dict_web, location_dict_mobile))
 
@@ -126,7 +132,7 @@ def retrieve_pageview_report(service, webpage_url):
   ).execute()
   #print "uniquePageViews-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
-  print "retrieve_pageview_report: " + webpage_url + ": " + str(parse_response_first_val(response));
+  #print "retrieve_pageview_report: " + webpage_url + ": " + str(parse_response_first_val(response));
   return parse_response_first_val(response)
 
 def retrieve_web_pageview_report(service, username):
@@ -148,38 +154,37 @@ def retrieve_web_pageview_report(service, username):
   #print str(response)
   return parse_response_all_vals_sum(response)
 
-def retrieve_single_pageview_report(service, webpage_url, days_ago):
+def retrieve_single_pageview_report(service, username, days_ago):
 
   startString = str(days_ago) + "daysAgo"
   endString = str(days_ago - 1) + "daysAgo"
+  webpage_url1 = '/user/' + username
+  webpage_url2 = '/user/' + username + '/'
+  webpage_url3 = '/user/' + username + '/iOS'
   response = service.reports().batchGet(
     body={
       'reportRequests' : [
         {
-          # On the format of fields ulocations_dictionary[key] = sed in Query Explorer, see:
-          # https://developers.google.com/analytics/devguides/reporting/core/v4/samples
-          # https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet
           'viewId': VIEW_ID,
           'dateRanges': [{'startDate' : startString, 'endDate' : endString}],
           'metrics': [{'expression': 'ga:uniquePageViews'}],
           'dimensions': [{'name': 'ga:pagePath'}],
-          'filtersExpression': ('ga:pagePath==' + webpage_url)
+          'filtersExpression': ('ga:pagePath==' + webpage_url1 + ',ga:pagePath==' + webpage_url2 + ',ga:pagePath==' + webpage_url3)
         }]
     }
   ).execute()
   #print "uniquePageViews-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
-  return parse_response_first_val(response)
+  return parse_response_all_vals_sum(response)
 
-def retrieve_pageview_locations_report(service, webpage_url, max_results):
+def retrieve_pageview_locations_report(service, username, max_results):
+  webpage_url1 = '/user/' + username
+  webpage_url2 = '/user/' + username + '/'
+  webpage_url3 = '/user/' + username + '/iOS'
   response = service.reports().batchGet(
     body={
       'reportRequests' : [
         {
-          # On the format of fields used in Query Explorer, see:
-          # https://developers.google.com/analytics/devguides/reporting/core/v4/samples
-          # https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet
-
           # NOTE: In our implementation, it does not make sense to sort (since we will be storing values
           # in dictionaries, then merging dictionaries of different webpage_urls, then sort the data after
           # merge.
@@ -188,7 +193,7 @@ def retrieve_pageview_locations_report(service, webpage_url, max_results):
           'metrics': [{'expression': 'ga:uniquePageViews'}],
           'dimensions': [{'name': 'ga:pagePath'}, {'name': 'ga:city'}],
           #'orderBys': [{'fieldName': 'ga:uniquePageViews', 'sortOrder': 'DESCENDING'}],
-          'filtersExpression': ('ga:pagePath==' + webpage_url),
+          'filtersExpression': ('ga:pagePath==' + webpage_url1 + ',ga:pagePath==' + webpage_url2 + ',ga:pagePath==' + webpage_url3),
           'pageSize': max_results
         }]
     }
@@ -197,7 +202,10 @@ def retrieve_pageview_locations_report(service, webpage_url, max_results):
   # Parse the Core Reporting response dictionary and return the result integer
   return parse_response_all_vals(response)
 
-def retrieve_total_events_report(service, webpage_url):
+def retrieve_total_events_report(service, username):
+  webpage_url1 = '/user/' + username
+  webpage_url2 = '/user/' + username + '/'
+  webpage_url3 = '/user/' + username + '/iOS'
   response = service.reports().batchGet(
     body={
       'reportRequests' : [
@@ -209,33 +217,33 @@ def retrieve_total_events_report(service, webpage_url):
           'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
           'metrics': [{'expression': 'ga:totalEvents'}],
           'dimensions': [{'name': 'ga:pagePath'}],
-          'filtersExpression': ('ga:pagePath==' + webpage_url)
+          'filtersExpression': ('ga:pagePath==' + webpage_url1 + ',ga:pagePath==' + webpage_url2 + ',ga:pagePath==' + webpage_url3)
         }]
     }
   ).execute()
   #print "totalEvents-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
-  return parse_response_first_val(response)
+  return parse_response_all_vals_sum(response)
 
-def retrieve_single_event_report(service, webpage_url, social_platform):
+def retrieve_single_event_report(service, username, social_platform):
+  webpage_url1 = '/user/' + username
+  webpage_url2 = '/user/' + username + '/'
+  webpage_url3 = '/user/' + username + '/iOS'
   response = service.reports().batchGet(
     body={
       'reportRequests' : [
         {
-          # On the format of fields used in Query Explorer, see:
-          # https://developers.google.com/analytics/devguides/reporting/core/v4/samples
-          # https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet
           'viewId': VIEW_ID,
           'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
           'metrics': [{'expression': 'ga:totalEvents'}],
           'dimensions': [{'name': 'ga:pagePath'},{'name': 'ga:eventAction'},{'name': 'ga:eventLabel'}],
-          'filtersExpression': ('ga:pagePath==' + webpage_url + ';ga:eventAction==click;ga:eventLabel==' + social_platform)
+          'filtersExpression': ('ga:pagePath==' + webpage_url1 + ',ga:pagePath==' + webpage_url2 + ',ga:pagePath==' + webpage_url3 + ';ga:eventAction==click;ga:eventLabel==' + social_platform)
         }]
     }
   ).execute()
   #print "single-pagePath for " + webpage_url + " and " + social_platform + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
-  return parse_response_first_val(response)
+  return parse_response_all_vals_sum(response)
 
 
 def parse_response_first_val(response):
@@ -276,11 +284,11 @@ def parse_response_all_vals_sum(response):
       dimensions = row.get('dimensions', [])
       dateRangeValues = row.get('metrics', [])
       for header, dimension in zip(dimensionHeaders, dimensions):
-        #print header + ': ' + dimension
+        print header + ': ' + dimension + ';',
         for i, values in enumerate(dateRangeValues):
           #print '--Date range (' + str(i) + ')'
           for metricHeader, value in zip(metricHeaders, values.get('values')):
-            print '--parse_response_all_vals_sum: ' + metricHeader.get('name') + ': ' + value
+            print metricHeader.get('name') + ': ' + value
             valueSum += int(value)
 
   # zero is returned if response is empty
@@ -291,6 +299,7 @@ def parse_response_all_vals_sum(response):
 def parse_response_all_vals(response):
   # Parses and prints the Analytics Reporting API V4 response
   # Here, we return a dictionary for all values in the response
+  #print response
   locations_dictionary = dict()
 
   for report in response.get('reports', []):
@@ -312,7 +321,10 @@ def parse_response_all_vals(response):
         #print '--Date range (' + str(i) + ')'
         for metricHeader, value in zip(metricHeaders, values.get('values')):
           #print '--' + metricHeader.get('name') + ': ' + value
-          locations_dictionary[key] = int(value)
+          if key in locations_dictionary:
+            locations_dictionary[key] += int(value)
+          else:
+            locations_dictionary[key] = int(value)
 
   return locations_dictionary 
 
@@ -377,6 +389,22 @@ def main():
   user_web_pageviews = get_user_page_views(username2)
   user_code_scans = get_user_code_scans(username2)
   print "Testing result: get_user_page_views = " + str(user_web_pageviews) + ", get_user_code_scans = " + str(user_code_scans)
+
+  # Systematic Test Cases, at least to make sure there are no syntax errors
+  print "----Systematic Test Cases----"
+  testUser = 'austin'
+  print "get_user_page_views = " + str(get_user_page_views(testUser))
+  print "get_user_code_scans = " + str(get_user_code_scans(testUser))
+  print "get_user_single_page_views_for_day = " + str(get_user_single_page_views_for_day(testUser, 10))
+  print "get_user_total_engagements = " + str(get_user_total_engagements(testUser))
+  print "get_user_single_engagements = " + str(get_user_single_engagements(testUser, 'facebook'))
+  print "get_user_total_engagements_breakdown = " + str(get_user_total_engagements_breakdown(testUser, ['facebook', 'instagram']))
+  print "get_user_page_views_locations = " + str(get_user_page_views_locations(testUser, 15))
+  print "----End Systematic Test Cases----"
+  
+  print "----Current Session Testing----"
+  cities = get_user_page_views_locations('austin', 15)
+  print cities
 
 if __name__ == '__main__':
   main()
