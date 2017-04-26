@@ -368,14 +368,15 @@ def main():
 #  eng_dict = get_user_total_engagements_breakdown(service, username, ['instagram', 'facebook', 'snapchat'])
 #  print "User engagement dictionary"
 #  print eng_dict
-  dicto = get_user_page_views_locations(username, 10)
+  dicto = get_user_page_views_locations(username1, 10)
   #print "DICTIONARY:"
   #print dicto
 
   # Testing #2
   username2 = 'austin'
   user_web_pageviews = get_user_page_views(username2)
-  print "Testing result: " + str(user_web_pageviews)
+  user_code_scans = get_user_code_scans(username2)
+  print "Testing result: get_user_page_views = " + str(user_web_pageviews) + ", get_user_code_scans = " + str(user_code_scans)
 
 if __name__ == '__main__':
   main()
