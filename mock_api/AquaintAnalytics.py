@@ -76,6 +76,7 @@ def get_user_single_page_views_for_day(username, days_ago):
   #view_mobile = retrieve_single_pageview_report(service, '/user/' + username + '/iOS', days_ago)
   #return int(view_desktop) + int(view_mobile)
   views_total = retrieve_single_pageview_report(service, username, days_ago)
+  return int(views_total)
 
 # Return single number to reflect number of total engagements for all platforms combined
 def get_user_total_engagements(username):
@@ -84,7 +85,7 @@ def get_user_total_engagements(username):
   #click_mobile = retrieve_total_events_report(service, '/user/' + username + '/iOS')
   #return int(click_desktop) + int(click_mobile)
   clicks_total = retrieve_total_events_report(service, username)
-  return clicks_total
+  return int(clicks_total)
 
 # Return single number to reflect number of engagments for just 1 social platform
 def get_user_single_engagements(username, social_platform):
@@ -93,7 +94,7 @@ def get_user_single_engagements(username, social_platform):
   #click_mobile_single = retrieve_single_event_report(service, '/user/' + username + '/iOS', social_platform)
   #return int(click_desktop_single) + int(click_mobile_single)
   clicks_total_single = retrieve_single_event_report(service, username, social_platform)
-  return clicks_total_single
+  return int(clicks_total_single)
 
 # Return dictionary of social platform -> engagement count for all given social platforms
 def get_user_total_engagements_breakdown(username, social_platform_list):
