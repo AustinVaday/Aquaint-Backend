@@ -27,6 +27,16 @@ def adduser(event, sql):
     
     return sql_cd(sql, query)
 
+def deleteuser(event, sql):
+    if 'password' not in event: raise RuntimeError("Please specify 'password' for this operation.")
+    if event['password'] != sqlconf.deletepass: raise RuntimeError("Please specify 'password' for this operation.")
+
+    query = ("DELETE FROM users WHERE username = '%{target}%'").format(
+        target = event['target']
+    )
+    
+    return sql_cd(sql, query)
+
 def updatern(event, sql):
     if 'realname' not in event: raise RuntimeError("Please specify 'realname'.")
     
@@ -421,6 +431,7 @@ def subscriptionGetExpiresDate(event):
 
 dispatch = {
     'adduser':                          adduser,
+    'deleteuser':                       deleteuser,   
     'updatern':                         updatern,
     'simplesearch':                     simplesearch,
     'follow':                           follow,

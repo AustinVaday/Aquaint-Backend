@@ -4,3 +4,4 @@ port = 3306
 username = "lambda"
 dbname = "follows_db"
 timeout = 10
+deletepass = "AquaintDeleteAllow123"
