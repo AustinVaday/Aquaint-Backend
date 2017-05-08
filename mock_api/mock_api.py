@@ -415,17 +415,27 @@ def verifyAppleReceipt(event):
     try:
         #with itunesiap.env.current().clone(use_sandbox=True):
         response = itunesiap.verify(event["receipt_json"], itunesiapconf.api_key)
+        print "verifyAppleReceipt(): verification successful in production mode."
         return response
     except Exception as e:
-        print('invalid receipt provided')
+        # verify the receipt in sandbox mode again if it belongs to sandbox
+        if e.status == 21007:
+            print "verifyAppleReceipt(): retry verification in Sandbox mode."
+            with itunesiap.env.current().clone(use_sandbox=True):
+                response = itunesiap.verify(event["receipt_json"], itunesiapconf.api_key)
+                return response
+
+        print 'receipt invalid for either production or Sandbox: ' + e
         return str(e)
 
 def subscriptionGetExpiresDate(event):
     response = verifyAppleReceipt(event)
 
     try:
+        print "subscriptionGetExpiresDate: " + str(response.receipt.last_in_app.expires_date_ms)
         return response.receipt.last_in_app.expires_date_ms
     except Exception as e:
+        print "unable to get expiration date from response: " + e
         return str(e)
         #return 0
 
