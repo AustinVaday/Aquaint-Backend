@@ -168,7 +168,7 @@ def retrieve_single_pageview_report(service, username, days_ago):
         {
           'viewId': VIEW_ID,
           'dateRanges': [{'startDate' : startString, 'endDate' : endString}],
-          'metrics': [{'expression': 'ga:uniquePageViews'}],
+          'metrics': [{'expression': 'ga:sessions'}],
           'dimensions': [{'name': 'ga:pagePath'}],
           'filtersExpression': ('ga:pagePath==' + webpage_url1 + ',ga:pagePath==' + webpage_url2 + ',ga:pagePath==' + webpage_url3)
         }]
@@ -259,13 +259,13 @@ def parse_response_first_val(response):
     for row in rows:
       dimensions = row.get('dimensions', [])
       dateRangeValues = row.get('metrics', [])
-      #for header, dimension in zip(dimensionHeaders, dimensions):
-        #print header + ': ' + dimension
-      for i, values in enumerate(dateRangeValues):
-        #print '--Date range (' + str(i) + ')'
-        for metricHeader, value in zip(metricHeaders, values.get('values')):
-          #print '--' + metricHeader.get('name') + ': ' + value
-          return str(value)
+      for header, dimension in zip(dimensionHeaders, dimensions):
+        print header + ': ' + dimension + ';',
+        for i, values in enumerate(dateRangeValues):
+          #print '--Date range (' + str(i) + ')'
+          for metricHeader, value in zip(metricHeaders, values.get('values')):
+            print metricHeader.get('name') + ': ' + value
+            return str(value)
 
   # zero is returned if response is empty
   #print '--Response is empty.'
