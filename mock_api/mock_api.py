@@ -31,7 +31,7 @@ def deleteuser(event, sql):
     if 'password' not in event: raise RuntimeError("Please specify 'password' for this operation.")
     if event['password'] != sqlconf.deletepass: raise RuntimeError("Please specify 'password' for this operation.")
 
-    query = ("DELETE FROM users WHERE username = '%{target}%'").format(
+    query = ("DELETE FROM users WHERE username = '{target}'").format(
         target = event['target']
     )
     
