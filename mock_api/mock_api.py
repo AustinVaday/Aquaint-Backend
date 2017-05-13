@@ -267,7 +267,7 @@ def createScanCodeForUser(event):
     s3 = boto3.resource('s3')
 
     request_headers = {
-        "X-Mashape-Key": "3AQc18gTaJmshmHWJWfKnzKtNhDEp1HcAVwjsnhOAxrcaYjCn8"
+        "X-Mashape-Key": "SBT5CNJt3JmshvkoWVL14u7zs5Mhp1z6tLbjsnUbaJnrvKkYHa"
     }
 
     # Generate this string using https://market.mashape.com/unitag/qr-code-generation
