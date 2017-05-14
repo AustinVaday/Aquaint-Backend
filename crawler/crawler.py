@@ -12,21 +12,21 @@ import timeline
 import sqlconf
 
 import decimal
-from apns import APNs, Frame, Payload
+#from apns import APNs, Frame, Payload
+from apns2.client import APNsClient
+from apns2.payload import Payload
 
 import socket, errno
 
 # Initializing Apple Push Notification: connect from provider to APN. A key file without passphase is used here for unattended script execution.
-#apns = APNs(use_sandbox=True, cert_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_cert.pem', key_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_key_noenc.pem')
-apns = APNs(use_sandbox=False,
-            cert_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_cert.pem',
-            key_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_key_noenc.pem')
+apns_client = APNsClient('/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_PyAPNs2.pem',
+                         use_sandbox=False, use_alternative_port=False)
 
 DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
 DEST_TABLE   = 'aquaint-newsfeed'
 DEVICE_TABLE = 'aquaint-devices'
-NOTIFICATION_PERIOD_SEC = 3600 # 1 hour
+NOTIFICATION_PERIOD_SEC = 600 # 10 minutes
 NOTIFICATION_TIMESTAMP_FILE = "notificationsLastSentTimestamp.txt"
 
 TIMELINE_LENGTH = 60
@@ -247,11 +247,34 @@ def json_chunk(events, to_jsonnable, max_size, max_num_events):
         event_partitions
     )
 
+def aquaint_send_push_notification(user, token_hex, text, identifier):
+    topic = 'com.aquaintapp'
+    payload = Payload(alert=text, sound="default", badge=1, custom={'identifier':identifier})
+    # not directly calling "send_notification" method here due to its strange use of "raise" keyword in PyAPNs2
+    stream_id = apns_client.send_notification_async(token_hex, payload, topic)
+    apns_response = client.get_notification_result(stream_id)
+    
+    print "Sent Push Notification to User [" + user + "]'s deviceID [" + token_hex + "]:" + apns_response
+    # Cleaning up registered device tokens on DynamoDB if necessary
+    if apns_response == "BadDeviceToken":
+        try:
+            cleanup_response = device_table.delete_item(
+                Key={
+                    'username': user,
+                    'deviceidlist': token_hex
+                })
+        except ClientError as e:
+            raise
+        else:
+            print ("User [" + user + "]'s deviceID [" + token_hex + "] is deleted from DynamoDB table: " +
+                   json.dumps(cleanup_response))
+
+
 def crawl():
     # Initialize databases
-    source = dynamo_table(SOURCE_TABLE)
-    dest   = dynamo_table(DEST_TABLE)
-    device_table = dynamo_table(DEVICE_TABLE)
+    global source = dynamo_table(SOURCE_TABLE)
+    global dest   = dynamo_table(DEST_TABLE)
+    global device_table = dynamo_table(DEVICE_TABLE)
     conns  = mysql_db()
     print('Connected databases')
     
@@ -325,14 +348,8 @@ def crawl():
                         pn_text = "Hey " + user + ", " + new_public_followers[0] + " is now following you! "
                     else:
                         pn_text = "Hey " + user + ", " + new_public_followers[0] + " and " + str(len(new_public_followers) - 1) + " others are now following you! "
-                    payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollower"})
-                    try:
-                        apns.gateway_server.send_notification(token_hex, payload)
-                        print "Send new_public_followers notification to " + user + " with device ID " + token_hex
-                    except socket.error, e:
-                        if e[0] == errno.EPIPE:
-                            print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex
-
+                    aquaint_send_push_notification(user, token_hex, pn_text, "newFollower")
+                    
             # Generate list of new follow requests for push notifications
             new_follow_requests = get_recent_follow_requests(conns, user, last_read_timestamp)
             
@@ -344,13 +361,7 @@ def crawl():
                         pn_text = "Hey " + user + ", you have a new follow request from " + new_follow_requests[0] + "! "
                     else:
                         pn_text = "Hey " + user + ", you have new follow requests from " + new_follow_requests[0] + " and " + str(len(new_follow_requests) - 1) + " others! "
-                    payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollowRequests"})
-                    try:
-                        apns.gateway_server.send_notification(token_hex, payload)
-                        print "Send new_follow_requests notification to " + user + " with device ID " + token_hex
-                    except socket.error, e:
-                        if e[0] == errno.EPIPE:
-                            print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex;
+                    aquaint_send_push_notification(user, token_hex, pn_text, "newFollowRequests")
 
             # Generate list of others that have accepted this user's follow requests
             new_follow_accepts = get_recent_follow_accepts(conns, user, last_read_timestamp)
@@ -363,13 +374,7 @@ def crawl():
                         pn_text = "Hey " + user + ", your follow request to " + new_follow_accepts[0] + " is accepted! "
                     else:
                         pn_text = "Hey " + user + ", your follow requests to " + new_follow_accepts[0] + " and " + str(len(new_follow_accepts) - 1) + " others are accepted! "
-                    payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"followRequestAcceptance"})
-                    try:
-                        apns.gateway_server.send_notification(token_hex, payload)
-                        print "Send new_follow_accepts notification to " + user + " with device ID " + token_hex
-                    except socket.error, e:
-                        if e[0] == errno.EPIPE:
-                            print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex;
+                    aquaint_send_push_notification(user, token_hex, pn_text, "followRequestAcceptance")
 
                 
 #########> Below code was written before privacy settings implemented. We will attempt to use a better 
