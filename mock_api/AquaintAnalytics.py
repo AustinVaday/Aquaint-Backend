@@ -244,7 +244,7 @@ def retrieve_single_event_report(service, username, social_platform):
   ).execute()
   #print "single-pagePath for " + webpage_url + " and " + social_platform + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
-  return parse_response_all_vals_sum(response)
+  return parse_response_first_val(response)
 
 
 def parse_response_first_val(response):
