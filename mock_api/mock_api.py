@@ -433,7 +433,10 @@ def subscriptionGetExpiresDate(event):
 
     try:
         print "subscriptionGetExpiresDate: " + str(response.receipt.last_in_app.expires_date_ms)
-        return response.receipt.last_in_app.expires_date_ms
+
+        # This value is actually the date at which user PURCHASED the product. So we must 
+        # add 1 month 
+        return response.receipt.last_in_app.expires_date_ms + 2592000000
     except Exception as e:
         print "unable to get expiration date from response: " + e
         return str(e)

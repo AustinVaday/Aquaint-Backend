@@ -59,7 +59,7 @@ def get_user_page_views(username):
   service = setup_and_get_service()
   #view_desktop = retrieve_pageview_report(service, '/user/' + username + '/')
   view_desktop = retrieve_web_pageview_report(service, username)
-  view_mobile = retrieve_pageview_report(service, '/user/' + username + '/iOS')
+  view_mobile = retrieve_pageview_report(service, '/user/' + username + '/iOS', username)
   return int(view_desktop) + int(view_mobile)
 
 # Return the number of code scans a user has got
@@ -67,7 +67,7 @@ def get_user_code_scans(username):
   service = setup_and_get_service()
   #view_desktop = retrieve_pageview_report(service, '/user/' + username + '/')
   view_desktop = retrieve_web_pageview_report(service, username)
-  app_scan = retrieve_pageview_report(service, '/user/' + username + '/iOS/scan')
+  app_scan = retrieve_pageview_report(service, '/user/' + username + '/iOS/scan', username)
   return int(view_desktop) + int(app_scan)
 
 def get_user_single_page_views_for_day(username, days_ago):
@@ -115,7 +115,10 @@ def get_user_page_views_locations(username, max_results):
 # get report of a page view query similar to that in Query Explorer
 # Use the Analytics Service Object to query the Analytics Reporting API v4
 
-def retrieve_pageview_report(service, webpage_url):
+def retrieve_pageview_report(service, webpage_url, username):
+  # QuotaUser: You can choose any arbitrary string that uniquely identifies a user, but it is limited to 40 characters. See:
+  # https://developers.google.com/api-client-library/python/guide/standard_parameters
+  # https://developers.google.com/analytics/devguides/config/mgmt/v3/limits-quotas
   response = service.reports().batchGet(
     body={
       'reportRequests' : [
@@ -129,7 +132,7 @@ def retrieve_pageview_report(service, webpage_url):
           'dimensions': [{'name': 'ga:pagePath'}],
           'filtersExpression': ('ga:pagePath==' + webpage_url)
         }]
-    }
+    }, quotaUser=username
   ).execute()
   #print "uniquePageViews-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
@@ -149,7 +152,7 @@ def retrieve_web_pageview_report(service, username):
           'dimensions': [{'name': 'ga:pagePath'}],
           'filtersExpression': ('ga:pagePath==' + webpage_url1 + ',ga:pagePath==' + webpage_url2)
         }]
-    }
+    }, quotaUser=username
   ).execute()
   
   #print str(response)
@@ -172,7 +175,7 @@ def retrieve_single_pageview_report(service, username, days_ago):
           'dimensions': [{'name': 'ga:pagePath'}],
           'filtersExpression': ('ga:pagePath==' + webpage_url1 + ',ga:pagePath==' + webpage_url2 + ',ga:pagePath==' + webpage_url3)
         }]
-    }
+    }, quotaUser=username
   ).execute()
   #print "uniquePageViews-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
@@ -197,7 +200,7 @@ def retrieve_pageview_locations_report(service, username, max_results):
           'filtersExpression': ('ga:pagePath==' + webpage_url1 + ',ga:pagePath==' + webpage_url2 + ',ga:pagePath==' + webpage_url3),
           'pageSize': max_results
         }]
-    }
+    }, quotaUser=username
   ).execute()
   #print "uniquePageViews-pagePath (LOCATIONS) for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
@@ -220,7 +223,7 @@ def retrieve_total_events_report(service, username):
           'dimensions': [{'name': 'ga:pagePath'}],
           'filtersExpression': ('ga:pagePath==' + webpage_url1 + ',ga:pagePath==' + webpage_url2 + ',ga:pagePath==' + webpage_url3)
         }]
-    }
+    }, quotaUser=username
   ).execute()
   #print "totalEvents-pagePath for " + webpage_url + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
@@ -240,11 +243,11 @@ def retrieve_single_event_report(service, username, social_platform):
           'dimensions': [{'name': 'ga:pagePath'},{'name': 'ga:eventAction'},{'name': 'ga:eventLabel'}],
           'filtersExpression': ('ga:pagePath==' + webpage_url1 + ',ga:pagePath==' + webpage_url2 + ',ga:pagePath==' + webpage_url3 + ';ga:eventAction==click;ga:eventLabel==' + social_platform)
         }]
-    }
+    }, quotaUser=username
   ).execute()
   #print "single-pagePath for " + webpage_url + " and " + social_platform + ": " + str(response)
   # Parse the Core Reporting response dictionary and return the result integer
-  return parse_response_all_vals_sum(response)
+  return parse_response_first_val(response)
 
 
 def parse_response_first_val(response):
