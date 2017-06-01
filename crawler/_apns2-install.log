@@ -1,0 +1,1237 @@
+Traceback (most recent call last):
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/bin/easy_install", line 11, in <module>
+    sys.exit(main())
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/command/easy_install.py", line 1909, in main
+    with_ei_usage(lambda:
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/command/easy_install.py", line 1896, in with_ei_usage
+    return f()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/command/easy_install.py", line 1913, in <lambda>
+    distclass=DistributionWithoutHelpCommands, **kw
+  File "/usr/lib/python2.7/distutils/core.py", line 151, in setup
+    dist.run_commands()
+  File "/usr/lib/python2.7/distutils/dist.py", line 953, in run_commands
+    self.run_command(cmd)
+  File "/usr/lib/python2.7/distutils/dist.py", line 972, in run_command
+    cmd_obj.run()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/command/easy_install.py", line 358, in run
+    self.easy_install(spec, not self.no_deps)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/command/easy_install.py", line 590, in easy_install
+    self.process_distribution(spec, dist, deps, "Using")
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/command/easy_install.py", line 671, in process_distribution
+    [requirement], self.local_index, self.easy_install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/command/easy_install.py", line 593, in easy_install
+    return self.install_item(spec, dist.location, tmpdir, deps)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/command/easy_install.py", line 623, in install_item
+    dists = self.install_eggs(spec, download, tmpdir)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/command/easy_install.py", line 809, in install_eggs
+    return self.build_and_install(setup_script, setup_base)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/command/easy_install.py", line 1015, in build_and_install
+    self.run_setup(setup_script, setup_base, args)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/command/easy_install.py", line 1000, in run_setup
+    run_setup(setup_script, args)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/sandbox.py", line 50, in run_setup
+    lambda: execfile(
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/sandbox.py", line 100, in run
+    return func()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/sandbox.py", line 52, in <lambda>
+    {'__file__':setup_script, '__name__':'__main__'}
+  File "setup.py", line 192, in <module>
+  File "/usr/lib/python2.7/distutils/core.py", line 111, in setup
+    _setup_distribution = dist = klass(attrs)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 580, in resolve
+    dist = best[req.key] = env.best_match(req, ws, installer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 818, in best_match
+    return self.obtain(req, installer) # try and download/install
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 830, in obtain
+    return installer(requirement)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 292, in fetch_build_egg
+    dist = self.__class__({'script_args':['easy_install']})
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 243, in __init__
+    _Distribution.__init__(self,attrs)
+  File "/usr/lib/python2.7/distutils/dist.py", line 287, in __init__
+    self.finalize_options()
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/setuptools/dist.py", line 276, in finalize_options
+    ep.require(installer=self.fetch_build_egg)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 2060, in require
+    working_set.resolve(self.dist.requires(self.extras),env,installer)))
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 573, in resolve
+    env = Environment(self.entries)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 742, in __init__
+    self.scan(search_path)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 771, in scan
+    for dist in find_distributions(item):
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 1745, in find_eggs_in_zip
+    metadata = EggMetadata(importer)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 1710, in __init__
+    self.zipinfo = build_zipmanifest(importer.archive)
+  File "/home/ubuntu/Aquaint-Backend-Test-Env/crawler/venv/local/lib/python2.7/site-packages/pkg_resources.py", line 1477, in build_zipmanifest
+    zfile = zipfile.ZipFile(path)
+  File "/usr/lib/python2.7/zipfile.py", line 751, in __init__
+    if isinstance(file, basestring):
+RuntimeError: maximum recursion depth exceeded while calling a Python object
