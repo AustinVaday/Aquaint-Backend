@@ -1,2 +1,4 @@
 venv
+venv.bak
 notificationsLastSentTimestamp.txt
+requirements.txt.bak

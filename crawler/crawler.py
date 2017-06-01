@@ -13,6 +13,7 @@ import sqlconf
 
 import decimal
 from apns import APNs, Frame, Payload
+from time import sleep
 
 import socket, errno
 
@@ -26,7 +27,7 @@ DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = 'aquaint-user-eventlist'
 DEST_TABLE   = 'aquaint-newsfeed'
 DEVICE_TABLE = 'aquaint-devices'
-NOTIFICATION_PERIOD_SEC = 3600 # 1 hour
+NOTIFICATION_PERIOD_SEC = 600 # 10 minutes
 NOTIFICATION_TIMESTAMP_FILE = "notificationsLastSentTimestamp.txt"
 
 TIMELINE_LENGTH = 60
@@ -328,10 +329,14 @@ def crawl():
                     payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollower"})
                     try:
                         apns.gateway_server.send_notification(token_hex, payload)
+                        #print "---APN-token_hex---:" + token_hex + ":---pn_text---:" + pn_text
                         print "Send new_public_followers notification to " + user + " with device ID " + token_hex
+                        #sleep(1)
                     except socket.error, e:
                         if e[0] == errno.EPIPE:
                             print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex
+                        else:
+                            print "--Caught Exception when sending Push Notification: " + str(e)
 
             # Generate list of new follow requests for push notifications
             new_follow_requests = get_recent_follow_requests(conns, user, last_read_timestamp)
@@ -348,9 +353,12 @@ def crawl():
                     try:
                         apns.gateway_server.send_notification(token_hex, payload)
                         print "Send new_follow_requests notification to " + user + " with device ID " + token_hex
+                        #sleep(1)
                     except socket.error, e:
                         if e[0] == errno.EPIPE:
                             print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex;
+                        else:
+                            print "--Caught Exception when sending Push Notification: " + str(e)
 
             # Generate list of others that have accepted this user's follow requests
             new_follow_accepts = get_recent_follow_accepts(conns, user, last_read_timestamp)
@@ -367,9 +375,12 @@ def crawl():
                     try:
                         apns.gateway_server.send_notification(token_hex, payload)
                         print "Send new_follow_accepts notification to " + user + " with device ID " + token_hex
+                        #sleep(1)
                     except socket.error, e:
                         if e[0] == errno.EPIPE:
                             print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex;
+                        else:
+                            print "--Caught Exception when sending Push Notification: " + str(e)
 
                 
 #########> Below code was written before privacy settings implemented. We will attempt to use a better 
@@ -389,8 +400,8 @@ def crawl():
 #        # Will determine whether we write a new notification timestamp or not later in the script
 #        did_send_notif = False
 #
-#        # If we send push notification successfully, update db user with new notification timestamp
 #        if did_send_notif:
+#        # If we send push notification successfully, update db user with new notification timestamp
 #            write_eventlist_notif(source, user, get_current_timestamp())
 
     
