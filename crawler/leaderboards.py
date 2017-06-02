@@ -15,11 +15,7 @@ import decimal
 
 import socket, errno
 
-DYNAMO_MAX_BYTES = 3500
 DEST_TABLE   = 'aquaint-leaderboards'
-
-TIMELINE_LENGTH = 60
-MAX_NUM_EVENTS = 15
 
 # Return unix timestamp UTC time
 def get_current_timestamp():
@@ -32,14 +28,16 @@ def dynamo_table(table_name):
         'dynamodb'
     ).Table(table_name)
 
-def write_data(table, metric, attributes, usernames):
+def write_data(table, metric, attributes, usernames, index, display_name):
     # Insert new records
     table.put_item(
         Item={
             'metric': metric,
             'attributes': attributes,
             'usernames': usernames,
-            'lastupdated': get_current_timestamp() 
+            'lastupdated': get_current_timestamp(),
+            'index': index,
+            'displayname': display_name
         }
     )
 
@@ -95,8 +93,8 @@ def aggregate():
     print('mostFollowings:')
     print(list(most_followees_users))
     
-    write_data(dest, "mostFollowers", list(most_followers_count_list), list(most_followers_users))
-    write_data(dest, "mostFollowings", list(most_followees_count_list), list(most_followees_users))
+    write_data(dest, "mostFollowers", list(most_followers_count_list), list(most_followers_users), 0, "Most Followers")
+    write_data(dest, "mostFollowings", list(most_followees_count_list), list(most_followees_users), 1, "Most Following")
     print('Done')
 
 
