@@ -112,6 +112,14 @@ def get_user_page_views_locations(username, max_results):
   location_dict_mobile = retrieve_pageview_locations_report(service, '/user/' + username + '/iOS', max_results)
   return sorted_tuple_list_desc(union_dict(location_dict_web, location_dict_mobile))
 
+def get_top_profile_views(max_results): 
+  service = setup_and_get_service()
+  return sorted_tuple_list_desc(retrieve_top_profile_views_report(service,max_results))
+
+def get_top_engagements(max_results): 
+  service = setup_and_get_service()
+  return sorted_tuple_list_desc(retrieve_top_engagements_report(service,max_results))
+
 # get report of a page view query similar to that in Query Explorer
 # Use the Analytics Service Object to query the Analytics Reporting API v4
 
@@ -249,6 +257,49 @@ def retrieve_single_event_report(service, username, social_platform):
   # Parse the Core Reporting response dictionary and return the result integer
   return parse_response_first_val(response)
 
+def retrieve_top_profile_views_report(service, max_results):
+  response = service.reports().batchGet(
+    body={
+      'reportRequests' : [
+        {
+          # NOTE: In our implementation, it does not make sense to sort (since we will be storing values
+          # in dictionaries, then merging dictionaries of different webpage_urls, then sort the data after
+          # merge.
+          'viewId': VIEW_ID,
+          'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
+          'metrics': [{'expression': 'ga:uniquePageViews'}],
+          'dimensions': [{'name': 'ga:pagePath'}],
+          'orderBys': [{'fieldName': 'ga:uniquePageViews', 'sortOrder': 'DESCENDING'}],
+          'filtersExpression': ('ga:pagePath=@/user/'),
+          'pageSize': max_results
+        }]
+    }, quotaUser='aquaintadmin'
+  ).execute()
+  #print "uniquePageViews-pagePath (LOCATIONS) for " + webpage_url + ": " + str(response)
+  # Parse the Core Reporting response dictionary and return the result integer
+  return parse_response_all_vals(response)
+
+def retrieve_top_engagements_report(service, max_results):
+  response = service.reports().batchGet(
+    body={
+      'reportRequests' : [
+        {
+          # NOTE: In our implementation, it does not make sense to sort (since we will be storing values
+          # in dictionaries, then merging dictionaries of different webpage_urls, then sort the data after
+          # merge.
+          'viewId': VIEW_ID,
+          'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
+          'metrics': [{'expression': 'ga:totalEvents'}],
+          'dimensions': [{'name': 'ga:pagePath'}],
+          'orderBys': [{'fieldName': 'ga:totalEvents', 'sortOrder': 'DESCENDING'}],
+          'filtersExpression': ('ga:pagePath=@/user/'),
+          'pageSize': max_results
+        }]
+    }, quotaUser='aquaintadmin'
+  ).execute()
+  #print "uniquePageViews-pagePath (LOCATIONS) for " + webpage_url + ": " + str(response)
+  # Parse the Core Reporting response dictionary and return the result integer
+  return parse_response_all_vals(response)
 
 def parse_response_first_val(response):
   # Parses and prints the Analytics Reporting API V4 response
@@ -318,13 +369,13 @@ def parse_response_all_vals(response):
 
       key=""
       for header, dimension in zip(dimensionHeaders, dimensions):
-        #print header + ': ' + dimension
-        if header == 'ga:city' : key = dimension
+        # print header + ': ' + dimension
+        if header == 'ga:city' or header == 'ga:pagePath' : key = dimension
 
       for i, values in enumerate(dateRangeValues):
         #print '--Date range (' + str(i) + ')'
         for metricHeader, value in zip(metricHeaders, values.get('values')):
-          #print '--' + metricHeader.get('name') + ': ' + value
+          # print '--' + metricHeader.get('name') + ': ' + value
           if key in locations_dictionary:
             locations_dictionary[key] += int(value)
           else:
@@ -377,38 +428,45 @@ def get_first_profile_id(service):
 
 def main():
   # How many page views does Navid get, including Aquaint-Web and Aquaint-iOS?
-  username1 = 'navid'
-  user_clicks = get_user_page_views(username1)
-  print "User " + username1 + " has " + str(user_clicks) + " Page Views."
+  # username1 = 'navid'
+  # user_clicks = get_user_page_views(username1)
+  # print "User " + username1 + " has " + str(user_clicks) + " Page Views."
 
 #  eng_dict = get_user_total_engagements_breakdown(service, username, ['instagram', 'facebook', 'snapchat'])
 #  print "User engagement dictionary"
 #  print eng_dict
-  dicto = get_user_page_views_locations(username1, 10)
+  # dicto = get_user_page_views_locations(username1, 10)
   #print "DICTIONARY:"
   #print dicto
 
-  # Testing #2
-  username2 = 'austin'
-  user_web_pageviews = get_user_page_views(username2)
-  user_code_scans = get_user_code_scans(username2)
-  print "Testing result: get_user_page_views = " + str(user_web_pageviews) + ", get_user_code_scans = " + str(user_code_scans)
+  print("TESTING TOP 20 PROFILE VIEWS:")
+  print(get_top_profile_views(20))
 
-  # Systematic Test Cases, at least to make sure there are no syntax errors
-  print "----Systematic Test Cases----"
-  testUser = 'austin'
-  print "get_user_page_views = " + str(get_user_page_views(testUser))
-  print "get_user_code_scans = " + str(get_user_code_scans(testUser))
-  print "get_user_single_page_views_for_day = " + str(get_user_single_page_views_for_day(testUser, 10))
-  print "get_user_total_engagements = " + str(get_user_total_engagements(testUser))
-  print "get_user_single_engagements = " + str(get_user_single_engagements(testUser, 'facebook'))
-  print "get_user_total_engagements_breakdown = " + str(get_user_total_engagements_breakdown(testUser, ['facebook', 'instagram']))
-  print "get_user_page_views_locations = " + str(get_user_page_views_locations(testUser, 15))
-  print "----End Systematic Test Cases----"
+  print("TESTING TOP 20 ENGAGEMENTS:")
+  print(get_top_engagements(20))
+
+
+  # Testing #2
+  # username2 = 'austin'
+  # user_web_pageviews = get_user_page_views(username2)
+  # user_code_scans = get_user_code_scans(username2)
+  # print "Testing result: get_user_page_views = " + str(user_web_pageviews) + ", get_user_code_scans = " + str(user_code_scans)
+
+  # # Systematic Test Cases, at least to make sure there are no syntax errors
+  # print "----Systematic Test Cases----"
+  # testUser = 'austin'
+  # print "get_user_page_views = " + str(get_user_page_views(testUser))
+  # print "get_user_code_scans = " + str(get_user_code_scans(testUser))
+  # print "get_user_single_page_views_for_day = " + str(get_user_single_page_views_for_day(testUser, 10))
+  # print "get_user_total_engagements = " + str(get_user_total_engagements(testUser))
+  # print "get_user_single_engagements = " + str(get_user_single_engagements(testUser, 'facebook'))
+  # print "get_user_total_engagements_breakdown = " + str(get_user_total_engagements_breakdown(testUser, ['facebook', 'instagram']))
+  # print "get_user_page_views_locations = " + str(get_user_page_views_locations(testUser, 15))
+  # print "----End Systematic Test Cases----"
   
-  print "----Current Session Testing----"
-  cities = get_user_page_views_locations('austin', 15)
-  print cities
+  # print "----Current Session Testing----"
+  # cities = get_user_page_views_locations('austin', 15)
+  # print cities
 
 if __name__ == '__main__':
   main()
