@@ -1,6 +1,0 @@
-#!/usr/bin/env python2
-import leaderboards 
-from datetime import datetime
-
-print('Aggregating leaderboards at %s' % datetime.now())
-leaderboards.aggregate()
