@@ -283,6 +283,55 @@ def createScanCodeForUser(event):
     else:
         return -1
 
+def createScanCodeForUserWhite(event): 
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+
+    # Set up AWS bucket
+    s3 = boto3.resource('s3')
+
+    request_headers = {
+        "X-Mashape-Key": "SBT5CNJt3JmshvkoWVL14u7zs5Mhp1z6tLbjsnUbaJnrvKkYHa"
+    }
+
+    # Generate this string using https://market.mashape.com/unitag/qr-code-generation
+    request_http = "https://unitag-qr-code-generation.p.mashape.com/api?data=%7B%22TYPE%22%3A%22url%22%2C%22DATA%22%3A%7B%22URL%22%3A%22www.aquaint.us/user/" + event["target"] + "%22%7D%7D&setting=%7B%22LAYOUT%22%3A%7B%22COLORBG%22%3A%22transparent%22%2C%22GRADIENT_TYPE%22%3A%22NO_GR%22%2C%22COLOR1%22%3A%22ffffff%22%7D%2C%22EYES%22%3A%7B%22EYE_TYPE%22%3A%22ER_IR%22%7D%2C%22LOGO%22%3A%7B%22L_NAME%22%3A%22http%3A%2F%2Faquaint.us%2Fstatic%2Fimages%2FAquaint-Social-Emblem-Transparent.png%22%2C%22EXCAVATE%22%3Atrue%7D%2C%22E%22%3A%22M%22%2C%22BODY_TYPE%22%3A5%7D&SIZE=800"
+
+    response = requests.get(request_http, headers=request_headers) 
+
+    if response.status_code == 200 or response.status_code == 201:
+        # Upload file to S3
+        bytesIO = BytesIO(response.content)
+        s3.meta.client.upload_fileobj(bytesIO, "aquaint-userfiles-mobilehub-146546989", "public/scancodes/" + event["target"] + "-white") 
+        return 1
+    else:
+        return -1
+
+def createScanCodeForUserColor(event): 
+    if 'target' not in event: raise RuntimeError("Please specify 'target'.")
+    if 'hex' not in event: raise RuntimeError("Please specify 'hex' color code without the '#'.")
+    if 'background' not in event: raise RuntimeError("Please specify 'background' color code without the '#'.")
+
+    # Set up AWS bucket
+    s3 = boto3.resource('s3')
+
+    request_headers = {
+        "X-Mashape-Key": "SBT5CNJt3JmshvkoWVL14u7zs5Mhp1z6tLbjsnUbaJnrvKkYHa"
+    }
+
+    # Generate this string using https://market.mashape.com/unitag/qr-code-generation
+    request_http = "https://unitag-qr-code-generation.p.mashape.com/api?data=%7B%22TYPE%22%3A%22url%22%2C%22DATA%22%3A%7B%22URL%22%3A%22www.aquaint.us/user/" + event["target"] + "%22%7D%7D&setting=%7B%22LAYOUT%22%3A%7B%22COLORBG%22%3A%22" + event["background"] + "%22%2C%22GRADIENT_TYPE%22%3A%22NO_GR%22%2C%22COLOR1%22%3A%22" + event["hex"] + "%22%7D%2C%22EYES%22%3A%7B%22EYE_TYPE%22%3A%22ER_IR%22%7D%2C%22LOGO%22%3A%7B%22L_NAME%22%3A%22http%3A%2F%2Faquaint.us%2Fstatic%2Fimages%2FAquaint-Social-Emblem-Transparent.png%22%2C%22EXCAVATE%22%3Atrue%7D%2C%22E%22%3A%22M%22%2C%22BODY_TYPE%22%3A5%7D&SIZE=800"
+
+    print request_http
+    response = requests.get(request_http, headers=request_headers) 
+
+    if response.status_code == 200 or response.status_code == 201:
+        # Upload file to S3
+        bytesIO = BytesIO(response.content)
+        s3.meta.client.upload_fileobj(bytesIO, "aquaint-userfiles-mobilehub-146546989", "public/scancodes/" + event["target"] + "-color_" + event["hex"] + "-background_" + event["background"]) 
+        return 1
+    else:
+        return -1
+
 def getUserPageViews(event):
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     return AquaintAnalytics.get_user_page_views(event["target"])
@@ -314,6 +363,14 @@ def getUserPageViewsLocations(event):
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     if 'max_results' not in event: raise RuntimeError("Please specify 'max_results'.")
     return AquaintAnalytics.get_user_page_views_locations(event["target"], event["max_results"])
+
+def getTopProfileViews(event):
+    if 'max_results' not in event: raise RuntimeError("Please specify 'max_results'.")
+    return AquaintAnalytics.get_top_profile_views(event["max_results"])
+
+def getTopEngagements(event):
+    if 'max_results' not in event: raise RuntimeError("Please specify 'max_results'.")
+    return AquaintAnalytics.get_top_engagements(event["max_results"])
 
 # # Doc ref : https://stripe.com/docs/mobile/ios/standard
 # # This function should only be called ONCE. 
@@ -465,6 +522,8 @@ dispatch = {
     'doIFollow':       	                doIFollow,
     'didISendFollowRequest':            didISendFollowRequest,
     'createScanCodeForUser':            createScanCodeForUser,
+    'createScanCodeForUserWhite':       createScanCodeForUserWhite,
+    'createScanCodeForUserColor':       createScanCodeForUserColor,
     'getUserPageViews':                 getUserPageViews,
     'getUserCodeScans':                 getUserCodeScans,
     'getUserSinglePayViewsForDay':      getUserSinglePayViewsForDay,
@@ -472,6 +531,8 @@ dispatch = {
     'getUserSingleEngagements':         getUserSingleEngagements,
     'getUserTotalEngagementsBreakdown': getUserTotalEngagementsBreakdown,
     'getUserPageViewsLocations':        getUserPageViewsLocations,
+    'getTopProfileViews':               getTopProfileViews,
+    'getTopEngagements':                getTopEngagements,
     # 'createPaymentCustomer':            createPaymentCustomer,
     # 'getPaymentCustomerObject':         getPaymentCustomerObject,
     # 'attachPaymentSourceToCustomerObject': attachPaymentSourceToCustomerObject,
@@ -486,6 +547,8 @@ dispatch = {
 # List all functions that do not need to connect to mysql database
 dispatch_sql_not_needed = [
     "createScanCodeForUser",
+    "createScanCodeForUserWhite",
+    "createScanCodeForUserColor",
     "getUserPageViews",
     "getUserCodeScans",
     "getUserSinglePayViewsForDay",
@@ -493,6 +556,8 @@ dispatch_sql_not_needed = [
     "getUserSingleEngagements",
     "getUserTotalEngagementsBreakdown",
     "getUserPageViewsLocations",
+    "getTopProfileViews",
+    "getTopEngagements",
     "verifyAppleReceipt",
     "subscriptionGetExpiresDate"
 ]
