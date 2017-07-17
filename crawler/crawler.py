@@ -263,7 +263,8 @@ def crawl():
     # Get last notification sent time, via local file on server 
     last_read_timestamp = get_notifications_last_sent_timestamp()
     current_timestamp = get_current_timestamp()
-    send_push_notifications = (current_timestamp - last_read_timestamp) > NOTIFICATION_PERIOD_SEC
+    #send_push_notifications = (current_timestamp - last_read_timestamp) > NOTIFICATION_PERIOD_SEC
+    send_push_notifications = False
     # A testing flag to enforce sending push notification
     #send_push_notifications = True
     print "It's time to send push notifications? " + str(send_push_notifications)
