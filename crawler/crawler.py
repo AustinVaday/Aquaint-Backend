@@ -12,7 +12,7 @@ import timeline
 import sqlconf
 
 import decimal
-from apns import APNs, Frame, Payload
+#from apns import APNs, Frame, Payload
 from time import sleep
 
 import socket, errno
@@ -327,17 +327,17 @@ def crawl():
                         pn_text = "Hey " + user + ", " + new_public_followers[0] + " is now following you! "
                     else:
                         pn_text = "Hey " + user + ", " + new_public_followers[0] + " and " + str(len(new_public_followers) - 1) + " others are now following you! "
-                    payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollower"})
-                    try:
-                        apns.gateway_server.send_notification(token_hex, payload)
-                        #print "---APN-token_hex---:" + token_hex + ":---pn_text---:" + pn_text
-                        print "Send new_public_followers notification to " + user + " with device ID " + token_hex
-                        #sleep(1)
-                    except socket.error, e:
-                        if e[0] == errno.EPIPE:
-                            print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex
-                        else:
-                            print "--Caught Exception when sending Push Notification: " + str(e)
+                    # payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollower"})
+                    # try:
+                    #     apns.gateway_server.send_notification(token_hex, payload)
+                    #     #print "---APN-token_hex---:" + token_hex + ":---pn_text---:" + pn_text
+                    #     print "Send new_public_followers notification to " + user + " with device ID " + token_hex
+                    #     #sleep(1)
+                    # except socket.error, e:
+                    #     if e[0] == errno.EPIPE:
+                    #         print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex
+                    #     else:
+                    #         print "--Caught Exception when sending Push Notification: " + str(e)
 
             # Generate list of new follow requests for push notifications
             new_follow_requests = get_recent_follow_requests(conns, user, last_read_timestamp)
@@ -350,16 +350,16 @@ def crawl():
                         pn_text = "Hey " + user + ", you have a new follow request from " + new_follow_requests[0] + "! "
                     else:
                         pn_text = "Hey " + user + ", you have new follow requests from " + new_follow_requests[0] + " and " + str(len(new_follow_requests) - 1) + " others! "
-                    payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollowRequests"})
-                    try:
-                        apns.gateway_server.send_notification(token_hex, payload)
-                        print "Send new_follow_requests notification to " + user + " with device ID " + token_hex
-                        #sleep(1)
-                    except socket.error, e:
-                        if e[0] == errno.EPIPE:
-                            print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex;
-                        else:
-                            print "--Caught Exception when sending Push Notification: " + str(e)
+                    # payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"newFollowRequests"})
+                    # try:
+                    #     apns.gateway_server.send_notification(token_hex, payload)
+                    #     print "Send new_follow_requests notification to " + user + " with device ID " + token_hex
+                    #     #sleep(1)
+                    # except socket.error, e:
+                    #     if e[0] == errno.EPIPE:
+                    #         print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex;
+                    #     else:
+                    #         print "--Caught Exception when sending Push Notification: " + str(e)
 
             # Generate list of others that have accepted this user's follow requests
             new_follow_accepts = get_recent_follow_accepts(conns, user, last_read_timestamp)
@@ -372,16 +372,16 @@ def crawl():
                         pn_text = "Hey " + user + ", your follow request to " + new_follow_accepts[0] + " is accepted! "
                     else:
                         pn_text = "Hey " + user + ", your follow requests to " + new_follow_accepts[0] + " and " + str(len(new_follow_accepts) - 1) + " others are accepted! "
-                    payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"followRequestAcceptance"})
-                    try:
-                        apns.gateway_server.send_notification(token_hex, payload)
-                        print "Send new_follow_accepts notification to " + user + " with device ID " + token_hex
-                        #sleep(1)
-                    except socket.error, e:
-                        if e[0] == errno.EPIPE:
-                            print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex;
-                        else:
-                            print "--Caught Exception when sending Push Notification: " + str(e)
+                    # payload = Payload(alert=pn_text, sound="default", badge=1, custom={'identifier':"followRequestAcceptance"})
+                    # try:
+                    #     apns.gateway_server.send_notification(token_hex, payload)
+                    #     print "Send new_follow_accepts notification to " + user + " with device ID " + token_hex
+                    #     #sleep(1)
+                    # except socket.error, e:
+                    #     if e[0] == errno.EPIPE:
+                    #         print "Broken Pipe Exception: " + user + " has invalid device ID " + token_hex;
+                    #     else:
+                    #         print "--Caught Exception when sending Push Notification: " + str(e)
 
                 
 #########> Below code was written before privacy settings implemented. We will attempt to use a better 
