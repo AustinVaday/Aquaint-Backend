@@ -1,5 +1,6 @@
 from __future__ import print_function
 from __future__ import division
+from __future__ import unicode_literals
 from builtins import map
 from builtins import filter
 from builtins import str
@@ -26,16 +27,16 @@ import socket, errno
 
 # Initializing Apple Push Notification: connect from provider to APN. A key file without passphase is used here for unattended script execution.
 #apns = APNs(use_sandbox=True, cert_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_cert.pem', key_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_key_noenc.pem')
-apns = APNs(use_sandbox=False,
-            cert_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_cert.pem',
-            key_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_key_noenc.pem')
+# apns = APNs(use_sandbox=False,
+#             cert_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_cert.pem',
+#             key_file='/home/ubuntu/.Aquaint-PN-Distribution/AquaintPN_Distribution_key_noenc.pem')
 
 DYNAMO_MAX_BYTES = 3500
-SOURCE_TABLE = 'aquaint-user-eventlist'
-DEST_TABLE   = 'aquaint-newsfeed'
-DEVICE_TABLE = 'aquaint-devices'
+SOURCE_TABLE = str(u'aquaint-user-eventlist')
+DEST_TABLE   = str(u'aquaint-newsfeed')
+DEVICE_TABLE = str(u'aquaint-devices')
 NOTIFICATION_PERIOD_SEC = 600 # 10 minutes
-NOTIFICATION_TIMESTAMP_FILE = "notificationsLastSentTimestamp.txt"
+NOTIFICATION_TIMESTAMP_FILE = str(u"notificationsLastSentTimestamp.txt")
 
 TIMELINE_LENGTH = 60
 MAX_NUM_EVENTS = 15
