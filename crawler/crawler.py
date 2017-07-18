@@ -215,7 +215,7 @@ def get_recent_follow_accepts(cursor, user, start_timestamp):
 # Convert events to json with to_jsonnable function and paginate
 def json_chunk(events, to_jsonnable, max_size, max_num_events):
     # No events handler
-    if len(events) == 0: return ['[]']
+    if len(list(events)) == 0: return ['[]']
 
     # Estimate page JSON size
     total_len = len(
@@ -223,7 +223,7 @@ def json_chunk(events, to_jsonnable, max_size, max_num_events):
             list(map(to_jsonnable, events))
         )
     )
-    avg_event_len = int(old_div(total_len, len(events)))
+    avg_event_len = int(old_div(total_len, len(list(events))))
     events_per_record = int(old_div(max_size, avg_event_len)) - 1
     events_per_record = min(events_per_record, max_num_events)    
 
@@ -231,7 +231,7 @@ def json_chunk(events, to_jsonnable, max_size, max_num_events):
     event_partitions = [
         events[i:i+events_per_record] for i in range(
             0,
-            len(events),
+            len(list(events)),
             events_per_record
         )
     ]
