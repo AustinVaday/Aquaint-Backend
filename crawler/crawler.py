@@ -1,4 +1,10 @@
 from __future__ import print_function
+from __future__ import division
+from builtins import map
+from builtins import filter
+from builtins import str
+from builtins import range
+from past.utils import old_div
 import gc
 import json
 
@@ -69,10 +75,7 @@ def dynamo_scan(table, field):
         result = table.scan(**opts)
         
         # Join arrays from multiple reads
-        ret += map(
-            lambda item: item[field],
-            result['Items']
-        )
+        ret += [item[field] for item in result['Items']]
         
         # Handle oversized read
         if 'LastEvaluatedKey' in result:
@@ -92,10 +95,7 @@ def read_eventlist(db, user):
     
     # Convert raw data to Event objects
     events = response['Item']['newsfeedList']
-    return map(
-        lambda event: timeline.Event.from_dynamo(user, event),
-        events
-    )
+    return [timeline.Event.from_dynamo(user, event) for event in events]
 
 ## Fetch notificaiton-timestamp for user
 #def read_eventlist_notif(db, user):
@@ -177,10 +177,7 @@ def get_followees(cursor, user):
         'SELECT followee FROM username_follows WHERE follower = %s;',
         (user)
     )
-    return map(
-        lambda row: row[0],
-        cursor.fetchall()
-    )
+    return [row[0] for row in cursor.fetchall()]
 
 # Get all followers of user after a particular point in time
 # Note that we do not include followers that were user-approved. This will be separate
@@ -222,11 +219,11 @@ def json_chunk(events, to_jsonnable, max_size, max_num_events):
     # Estimate page JSON size
     total_len = len(
         json.dumps(
-            map(to_jsonnable, events)
+            list(map(to_jsonnable, events))
         )
     )
-    avg_event_len = int(total_len / len(events))
-    events_per_record = int(max_size / avg_event_len) - 1
+    avg_event_len = int(old_div(total_len, len(events)))
+    events_per_record = int(old_div(max_size, avg_event_len)) - 1
     events_per_record = min(events_per_record, max_num_events)    
 
     # Paginate events based on JSON size estimate
@@ -239,15 +236,12 @@ def json_chunk(events, to_jsonnable, max_size, max_num_events):
     ]
     
     # Convert pages to json
-    return map(
-        lambda events: json.dumps(
-            map(
+    return [json.dumps(
+            list(map(
                 to_jsonnable,
                 events
-            )
-        ),
-        event_partitions
-    )
+            ))
+        ) for events in event_partitions]
 
 def crawl():
     # Initialize databases
@@ -283,10 +277,10 @@ def crawl():
             # Load the event list into the aggregator
             ag.load(
                 # Remove events where the current user is the only subject
-                filter(
+                list(filter(
                     lambda event, user=user: not (user in event.other and len(event.other) == 1),
                     followee_events
-                )
+                ))
             )
         
         # Sort off only enough events to fill timeline
