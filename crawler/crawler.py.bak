@@ -1,4 +1,3 @@
-from __future__ import print_function
 import gc
 import json
 
@@ -268,7 +267,7 @@ def crawl():
     send_push_notifications = False
     # A testing flag to enforce sending push notification
     #send_push_notifications = True
-    print("It's time to send push notifications? " + str(send_push_notifications))
+    print "It's time to send push notifications? " + str(send_push_notifications)
 
     # Iterate over all users
     for user in users:
