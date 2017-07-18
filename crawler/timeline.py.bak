@@ -1,9 +1,7 @@
-from builtins import range
-from builtins import object
 import multihead
 
 # Internal representation of timeline/newsfeed events
-class Event(object):
+class Event:
     # Create new event
     def __init__(self, user, event, other, time):
         self.user  = user
@@ -33,7 +31,7 @@ class Event(object):
         )
 
 # Lazy sorter wrapper class
-class Aggregator(object):
+class Aggregator:
     # Instantiate sorter to sort by event time
     def __init__(self):
         self.sorter = multihead.Sorter(lambda event: event.time)
@@ -44,4 +42,10 @@ class Aggregator(object):
     
     # Lazy sort up to N items, shrinking list to fit
     def sort(self, count):
-        return [x for x in [self.sorter.pop() for _ in range(count)] if x is not None]
+        return filter(
+            lambda x: x is not None,
+            map(
+                lambda _: self.sorter.pop(),
+                range(count)
+            )
+        )
