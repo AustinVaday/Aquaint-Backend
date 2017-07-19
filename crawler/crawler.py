@@ -28,6 +28,7 @@ from time import sleep
 import socket, errno
 from enum import Enum
 import logging
+import os
 
 # Initializing Apple Push Notification: connect from provider to APN. A key file without passphase is used here for unattended script execution.
 #apns = APNs(use_sandbox=True, cert_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_cert.pem', key_file='/home/ubuntu/.Aquaint-PN-keys/AquaintPN_key_noenc.pem')
@@ -40,7 +41,7 @@ DYNAMO_MAX_BYTES = 3500
 SOURCE_TABLE = str(u'aquaint-user-eventlist')
 DEST_TABLE   = str(u'aquaint-newsfeed')
 DEVICE_TABLE = str(u'aquaint-devices')
-NOTIFICATION_PERIOD_SEC = 600 # 10 minutes
+NOTIFICATION_PERIOD_SEC = 21600 # 6 hours
 NOTIFICATION_TIMESTAMP_FILE = str(u"notificationsLastSentTimestamp.txt")
 
 TIMELINE_LENGTH = 60
@@ -49,9 +50,10 @@ MAX_NUM_EVENTS = 15
 # Flags of configuring Apple Push Notification
 class PushNotificationMode(Enum):
     RUN = 0  # normal production of sending out push notifications at every pre-defined interval
-    LOG = 1  # do not send out any notification; log the contents of them instead for debugging
+    LOG = 1  # do not send out any notification; log the contents of them instead for debugging (if global logging flag is true) 
     STOP = 2  # do nothing
-    
+
+LOGGING_MODE = True  # global logging flag to keep log history
 PUSH_NOTIFICATION_MODE = PushNotificationMode.LOG
 
 # Return unix timestamp UTC time
@@ -266,15 +268,15 @@ def send_push_notification(device_token, message, identifier):
         print("Sent push notification to " + str(device_token) + ". Message: " + str(message) + ". Response: " + apn_response)
         
     elif PUSH_NOTIFICATION_MODE == PushNotificationMode.LOG:
-        logging.info("Planning to send push notification to %s. Message '%s'", str(device_token), str(message))
+        logging.info("Planning to send push notification to %s. Message: '%s'", str(device_token), str(message))
         
     elif PUSH_NOTIFICATION_MODE == PUshNotificationMode.STOP:
         return
 
 def crawl():
     # Create log file and configure format if any log options are enabled (currently for Push Notification logging only)
-    if PUSH_NOTIFICATION_MODE == PushNotificationMode.LOG:
-        log_filepath = '/var/log/aquaint/crawler-' + str(get_current_timestamp()) + '.log'
+    log_filepath = '/var/log/aquaint/crawler-' + str(get_current_timestamp()) + '.log'
+    if LOGGING_MODE:
         logging.basicConfig(filename=log_filepath, level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
         # Suppressing logging outputs from other modules for now
         for key in logging.Logger.manager.loggerDict:
@@ -447,4 +449,8 @@ def crawl():
 
     print('Done')
 
+    # Delete log file if empty 
+    logging.shutdown()
+    if LOGGING_MODE and os.stat(log_filepath).st_size == 0:
+        os.remove(log_filepath)
 
