@@ -26,6 +26,7 @@ from apns2.payload import Payload
 from time import sleep
 
 import socket, errno
+from enum import Enum
 import logging
 
 # Initializing Apple Push Notification: connect from provider to APN. A key file without passphase is used here for unattended script execution.
@@ -273,9 +274,12 @@ def send_push_notification(device_token, message, identifier):
 def crawl():
     # Create log file and configure format if any log options are enabled (currently for Push Notification logging only)
     if PUSH_NOTIFICATION_MODE == PushNotificationMode.LOG:
-        log_filepath = '/var/log/aquaint/crawler-' + str(get_current_timestamp)
+        log_filepath = '/var/log/aquaint/crawler-' + str(get_current_timestamp()) + '.log'
         logging.basicConfig(filename=log_filepath, level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
-        
+        # Suppressing logging outputs from other modules for now
+        for key in logging.Logger.manager.loggerDict:
+            logging.getLogger(key).setLevel(logging.CRITICAL)
+
     # Initialize databases
     source = dynamo_table(SOURCE_TABLE)
     dest   = dynamo_table(DEST_TABLE)
