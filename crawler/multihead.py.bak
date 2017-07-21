@@ -1,7 +1,5 @@
 # Lazy sorting data structure
-from builtins import range
-from builtins import object
-class _Storage(object):
+class _Storage:
     # Initialize empty storage
     def __init__(self):
         self.sources = []
@@ -9,7 +7,7 @@ class _Storage(object):
     
     # Remove empty source lists
     def __shrink(self):
-        self.sources = [x for x in self.sources if len(x) > 0]
+        self.sources = filter(lambda x: len(x) > 0, self.sources)
     
     # Add list to sources
     def load(self, source):
@@ -36,7 +34,7 @@ class _Storage(object):
             return None
 
 # Lazy sorter
-class Sorter(object):
+class Sorter:
     # Initialize new sorter with storage
     def __init__(self, key):
         self.key = key
