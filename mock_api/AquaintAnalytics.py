@@ -65,10 +65,8 @@ def get_user_page_views(username):
 # Return the number of code scans a user has got
 def get_user_code_scans(username):
   service = setup_and_get_service()
-  #view_desktop = retrieve_pageview_report(service, '/user/' + username + '/')
-  view_desktop = retrieve_web_pageview_report(service, username)
-  app_scan = retrieve_pageview_report(service, '/user/' + username + '/iOS/scan', username)
-  return int(view_desktop) + int(app_scan)
+  scans_total = retrieve_code_scans_report(service, username)
+  return int(scans_total)
 
 def get_user_single_page_views_for_day(username, days_ago):
   service = setup_and_get_service()
@@ -254,6 +252,22 @@ def retrieve_single_event_report(service, username, social_platform):
     }, quotaUser=username
   ).execute()
   #print "single-pagePath for " + webpage_url + " and " + social_platform + ": " + str(response)
+  # Parse the Core Reporting response dictionary and return the result integer
+  return parse_response_first_val(response)
+
+def retrieve_code_scans_report(service, username):
+  response = service.reports().batchGet(
+    body={
+      'reportRequests' : [
+        {
+          'viewId': VIEW_ID,
+          'dateRanges': [{'startDate' : '365daysAgo', 'endDate' : 'today'}],
+          'metrics': [{'expression': 'ga:totalEvents'}],
+          'dimensions': [{'name': 'ga:eventCategory'},{'name': 'ga:eventAction'},{'name': 'ga:eventLabel'}],
+          'filtersExpression': ('ga:eventCategory==scancode' + ';ga:eventAction==scan' + ';ga:eventLabel==' + username) 
+        }]
+    }, quotaUser=username
+  ).execute()
   # Parse the Core Reporting response dictionary and return the result integer
   return parse_response_first_val(response)
 
