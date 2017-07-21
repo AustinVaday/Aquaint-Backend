@@ -279,6 +279,7 @@ def createScanCodeForUser(event):
         # Upload file to S3
         bytesIO = BytesIO(response.content)
         s3.meta.client.upload_fileobj(bytesIO, "aquaint-userfiles-mobilehub-146546989", "public/scancodes/" + event["target"]) 
+        print "success: " + "http://aquaint-userfiles-mobilehub-146546989.s3.amazonaws.com/public/scancodes/" + event["target"]
         return 1
     else:
         return -1
@@ -302,6 +303,7 @@ def createScanCodeForUserWhite(event):
         # Upload file to S3
         bytesIO = BytesIO(response.content)
         s3.meta.client.upload_fileobj(bytesIO, "aquaint-userfiles-mobilehub-146546989", "public/scancodes/" + event["target"] + "-white") 
+        print "success: " + "http://aquaint-userfiles-mobilehub-146546989.s3.amazonaws.com/public/scancodes/" + event["target"] + "-white"
         return 1
     else:
         return -1
@@ -328,6 +330,7 @@ def createScanCodeForUserColor(event):
         # Upload file to S3
         bytesIO = BytesIO(response.content)
         s3.meta.client.upload_fileobj(bytesIO, "aquaint-userfiles-mobilehub-146546989", "public/scancodes/" + event["target"] + "-color_" + event["hex"] + "-background_" + event["background"]) 
+        print "success: " + "http://aquaint-userfiles-mobilehub-146546989.s3.amazonaws.com/public/scancodes/" + event["target"] + "-color_" + event["hex"] + "-background_" + event["background"] 
         return 1
     else:
         return -1
