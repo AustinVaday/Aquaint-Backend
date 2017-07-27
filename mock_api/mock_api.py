@@ -312,7 +312,10 @@ def createScanCodeForUserColor(event):
     if 'target' not in event: raise RuntimeError("Please specify 'target'.")
     if 'hex' not in event: raise RuntimeError("Please specify 'hex' color code without the '#'.")
     if 'background' not in event: raise RuntimeError("Please specify 'background' color code without the '#'.")
-
+    if 'imageurl' in event: 
+        imageUrl = event["imageurl"] 
+    else: 
+        imageUrl = "http://aquaint.us/static/images/Aquaint-Social-Emblem-Transparent.png"
     # Set up AWS bucket
     s3 = boto3.resource('s3')
 
@@ -321,7 +324,8 @@ def createScanCodeForUserColor(event):
     }
 
     # Generate this string using https://market.mashape.com/unitag/qr-code-generation
-    request_http = "https://unitag-qr-code-generation.p.mashape.com/api?data=%7B%22TYPE%22%3A%22url%22%2C%22DATA%22%3A%7B%22URL%22%3A%22www.aquaint.us/scancode/" + event["target"] + "%22%7D%7D&setting=%7B%22LAYOUT%22%3A%7B%22COLORBG%22%3A%22" + event["background"] + "%22%2C%22GRADIENT_TYPE%22%3A%22NO_GR%22%2C%22COLOR1%22%3A%22" + event["hex"] + "%22%7D%2C%22EYES%22%3A%7B%22EYE_TYPE%22%3A%22ER_IR%22%7D%2C%22LOGO%22%3A%7B%22L_NAME%22%3A%22http%3A%2F%2Faquaint.us%2Fstatic%2Fimages%2FAquaint-Social-Emblem-Transparent.png%22%2C%22EXCAVATE%22%3Atrue%7D%2C%22E%22%3A%22M%22%2C%22BODY_TYPE%22%3A5%7D&SIZE=800"
+    # NOTE: This may help decode URL strings: http://www.url-encode-decode.com/
+    request_http = "https://unitag-qr-code-generation.p.mashape.com/api?data=%7B%22TYPE%22%3A%22url%22%2C%22DATA%22%3A%7B%22URL%22%3A%22www.aquaint.us/scancode/" + event["target"] + "%22%7D%7D&setting=%7B%22LAYOUT%22%3A%7B%22COLORBG%22%3A%22" + event["background"] + "%22%2C%22GRADIENT_TYPE%22%3A%22NO_GR%22%2C%22COLOR1%22%3A%22" + event["hex"] + "%22%7D%2C%22EYES%22%3A%7B%22EYE_TYPE%22%3A%22ER_IR%22%7D%2C%22LOGO%22%3A%7B%22L_NAME%22%3A%22" + imageUrl + "%22%2C%22EXCAVATE%22%3Atrue%7D%2C%22E%22%3A%22M%22%2C%22BODY_TYPE%22%3A5%7D&SIZE=800"
 
     print request_http
     response = requests.get(request_http, headers=request_headers) 
